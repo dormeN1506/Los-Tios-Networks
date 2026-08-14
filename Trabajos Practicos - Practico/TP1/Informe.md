@@ -55,6 +55,11 @@ Un ejemplo adecuado para nuestro caso es un router o punto de acceso Wi‑Fi que
   ii) si, las transmisiones por cable coaxial la señal pierde potencia mientras recorre el cable debido principalmente a la resistencia de los conductores y a perdidas en el material aislante.
   iii) no es tan considerable la atenuacion en la fibra optica debido a que se utiliza la luz, pero si los cables no se encuentran instalados de la manera correcta puede presentar atenuacion.
 
+# Inciso 2
+*a)* En base a la imagen presentada podemos ver una comunicación unidireccional (simplex) debido a que los datos se transmiten solo desde el emisor hacia el receptor y por el clock compartido determinamos que es síncrona.
+
+*b)* Comparando las comunicaciones síncronas y asíncronas podemos decir que es mejor una sincrona para comunicaciones bidireccionales, ya que si buscamos la mayor velocidad, no perderemos bits en caracteres de inicio o parada y ademas podremos transmitir bloques mas grandes de datos. También al mantenerse continuamente sincronizados el emisor y el receptor permite mayores velocidades de transmisión.
+
 # Inciso 4
 
 *c)* El router opera en el canal de los 2.4 GHz. A esa frecuencia, opera en la región del espectro denominada Ultraalta frecuencia (Ultra High Frequency - UHF); utilizadas comunmente en servicios de comunicación en tierra, telefonía celular y comunicaciones militares. Opera en la banda de las microondas, donde las longitudes de onda abarcan aproximadamente desde 1 m hasta 100 mm.
