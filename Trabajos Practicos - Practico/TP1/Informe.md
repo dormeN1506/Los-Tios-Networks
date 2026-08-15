@@ -54,6 +54,23 @@ Un ejemplo adecuado para nuestro caso es un router o punto de acceso Wi‑Fi que
   i) si, en las transmisiones de telefonía celular la señal empeora al alejarnos de la antena y al atravesar edificios o paredes.
   ii) si, las transmisiones por cable coaxial la señal pierde potencia mientras recorre el cable debido principalmente a la resistencia de los conductores y a perdidas en el material aislante.
   iii) no es tan considerable la atenuacion en la fibra optica debido a que se utiliza la luz, pero si los cables no se encuentran instalados de la manera correcta puede presentar atenuacion.
+  # Inciso 3
+Los diversos motivos por los cuales se la transmisión inalámbrica de una señalescalonada no seria conveniente son los siguientes:  
+* Señalizacion: En el caso del uso de una señalizacion digital, buscando una ventaja economica termina provocando un mayor efecto de la atunuacion en señales digitales.
+* Atenuacion: Como se busca usar un medio no guiado vamos a tener una funcion mas compleja de la distancia y terminar dependiendo de las condiciones atmosféricas.Ademas, como se menciono anteriormente, las señales digitales sufren mas la atenuacino que las analogicas.
+* Distorsión de retardo: Esta distorsión,producida por la retardo variable en las componetes de la señal,es particularmente critica en la transmision de datos digitales limitando la velocidad de transmisión máxima.Ademas, se usan técnicas de ecualización para aterunar el efecto.
+* Ruido impulsivo: Ruido no continuo constituido por picos irregualares de corta duración que es uno de los principales errores en la comunicación digital de datos, un pico de energía de 0.01 s podría corromper hasta 560 bits si se transmiten a 56kbps.  
+
+#### Analisís de señal
+*a)* La técnica de modulación que se representa en la imagen es la técnica de modulación por desplazamiento de fase o PSK.    
+
+*b)* Onda modularizada : ![OndaModularizada](Multimedia/OndaInciso3.png)
+
+*c)* El principio de la modulación por desplazamiento de fase (PSK) consiste en provocar la variación en una de la características físicas de la señal portadora para la representar datos digitales. Otras técnicas de modulación que siguen el mismo principio son la modulación por desplazamiento por amplitud (ASK) y la modulación desplazamiento por frecuencía (FSK).
+
+*d)* El Bit Error Rate (BER) es una métrica que cuantifica la proporción de bits que se reciben de forma incorrecta respecto al total de bits transmitidos en un determinado periodo de tiempo. En terminos de prestaciones, la modulación PSK es la mejor en cuanto al BER, ya que es mas robusta y  tan sensible al ruido como la ASK y FSK.
+
+
 
 # Inciso 4
 
