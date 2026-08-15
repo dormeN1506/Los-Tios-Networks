@@ -54,7 +54,16 @@ Un ejemplo adecuado para nuestro caso es un router o punto de acceso Wi‑Fi que
   i) si, en las transmisiones de telefonía celular la señal empeora al alejarnos de la antena y al atravesar edificios o paredes.
   ii) si, las transmisiones por cable coaxial la señal pierde potencia mientras recorre el cable debido principalmente a la resistencia de los conductores y a perdidas en el material aislante.
   iii) no es tan considerable la atenuacion en la fibra optica debido a que se utiliza la luz, pero si los cables no se encuentran instalados de la manera correcta puede presentar atenuacion.
-  # Inciso 3
+
+# Inciso 2
+*a)* En base a la imagen presentada podemos ver una comunicación unidireccional (simplex) debido a que los datos se transmiten solo desde el emisor hacia el receptor y por el clock compartido determinamos que es síncrona.
+
+*b)* Comparando las comunicaciones síncronas y asíncronas podemos decir que es mejor una sincrona para comunicaciones bidireccionales, ya que si buscamos la mayor velocidad, no perderemos bits en caracteres de inicio o parada y ademas podremos transmitir bloques mas grandes de datos. También al mantenerse continuamente sincronizados el emisor y el receptor permite mayores velocidades de transmisión.
+
+*c)* El nombre del grupo es Los-Tios-Networks, el cuarto caracter es `-`, en ASCII = `45`, en binario = `00101101`.
+      ![00101101](Multimedia/00101101.png)
+      
+# Inciso 3
 Los diversos motivos por los cuales se la transmisión inalámbrica de una señalescalonada no seria conveniente son los siguientes:  
 * Señalizacion: En el caso del uso de una señalizacion digital, buscando una ventaja economica termina provocando un mayor efecto de la atunuacion en señales digitales.
 * Atenuacion: Como se busca usar un medio no guiado vamos a tener una funcion mas compleja de la distancia y terminar dependiendo de las condiciones atmosféricas.Ademas, como se menciono anteriormente, las señales digitales sufren mas la atenuacino que las analogicas.
@@ -64,21 +73,11 @@ Los diversos motivos por los cuales se la transmisión inalámbrica de una seña
 #### Analisís de señal
 *a)* La técnica de modulación que se representa en la imagen es la técnica de modulación por desplazamiento de fase o PSK.    
 
-*b)* Onda modularizada : ![OndaModularizada](Multimedia/OndaInciso3.png)
+*b)* Onda modulada: ![OndaModularizada](Multimedia/OndaInciso3.png)
 
 *c)* El principio de la modulación por desplazamiento de fase (PSK) consiste en provocar la variación en una de la características físicas de la señal portadora para la representar datos digitales. Otras técnicas de modulación que siguen el mismo principio son la modulación por desplazamiento por amplitud (ASK) y la modulación desplazamiento por frecuencía (FSK).
 
 *d)* El Bit Error Rate (BER) es una métrica que cuantifica la proporción de bits que se reciben de forma incorrecta respecto al total de bits transmitidos en un determinado periodo de tiempo. En terminos de prestaciones, la modulación PSK es la mejor en cuanto al BER, ya que es mas robusta y  tan sensible al ruido como la ASK y FSK.
-
-
-
-# Inciso 2
-*a)* En base a la imagen presentada podemos ver una comunicación unidireccional (simplex) debido a que los datos se transmiten solo desde el emisor hacia el receptor y por el clock compartido determinamos que es síncrona.
-
-*b)* Comparando las comunicaciones síncronas y asíncronas podemos decir que es mejor una sincrona para comunicaciones bidireccionales, ya que si buscamos la mayor velocidad, no perderemos bits en caracteres de inicio o parada y ademas podremos transmitir bloques mas grandes de datos. También al mantenerse continuamente sincronizados el emisor y el receptor permite mayores velocidades de transmisión.
-
-*c)* El nombre del grupo es Los-Tios-Networks, el cuarto caracter es `-`, en ASCII = `45`, en binario = `00101101`.
-      ![00101101](Multimedia/00101101.png)
 
 # Inciso 4
 
