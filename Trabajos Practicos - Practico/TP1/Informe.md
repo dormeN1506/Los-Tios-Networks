@@ -60,6 +60,9 @@ Un ejemplo adecuado para nuestro caso es un router o punto de acceso Wi‑Fi que
 
 *b)* Comparando las comunicaciones síncronas y asíncronas podemos decir que es mejor una sincrona para comunicaciones bidireccionales, ya que si buscamos la mayor velocidad, no perderemos bits en caracteres de inicio o parada y ademas podremos transmitir bloques mas grandes de datos. También al mantenerse continuamente sincronizados el emisor y el receptor permite mayores velocidades de transmisión.
 
+*c)* El nombre del grupo es Los-Tios-Networks, el cuarto caracter es `-`, en ASCII = `45`, en binario = `00101101`.
+      ![00101101](Multimedia/00101101.png)
+
 # Inciso 4
 
 *c)* El router opera en el canal de los 2.4 GHz. A esa frecuencia, opera en la región del espectro denominada Ultraalta frecuencia (Ultra High Frequency - UHF); utilizadas comunmente en servicios de comunicación en tierra, telefonía celular y comunicaciones militares. Opera en la banda de las microondas, donde las longitudes de onda abarcan aproximadamente desde 1 m hasta 100 mm.
