@@ -10,6 +10,7 @@
 * Zambellini, Matías Manuel
 
 ---
+
 # Inciso 1
 
 ### Fundamentos de señales y comunicaciones
