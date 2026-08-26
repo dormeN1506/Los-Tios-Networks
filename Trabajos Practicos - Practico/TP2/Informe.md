@@ -52,8 +52,12 @@ Además, la `SNR` y el `BER` guardan una relación inversa. Un valor elevado de 
 
 # Inciso 3
 
+Los sistemas de transmisión digital combaten los errores generados por el ruido del canal (como el ruido impulsivo o térmico) mediante la adición de redundancia controlada a la información original a nivel de software o hardware. Esto se implementa a través de dos enfoques principales:
 
+* **Detección: Se agregan bits adicionales a los datos transmitidos para verificar su integridad en el receptor. Ejemplos como el bit de paridad, sumas de verificación (Checksum) y el control de redundancia cíclica (CRC). Todos estos métodos de detección son realizados por el receptor, al aplicar el algoritmo de verificación, si obtiene un valor distinto al esperado, detecta que la trama fue corrompida.
 
+* **Corrección: Una vez detectado el error, el sistema puede recuperar la información de dos maneras. Mediante técnicas ARQ (Automatic Repeat reQuest), el receptor simplemente descarta la trama y solicita al emisor su retransmisión. En enlaces donde la retransmisión es inviable por alta latencia, se utilizan técnicas FEC (Forward Error Correction). Se emplean códigos matemáticos avanzados (como códigos de Hamming, Reed-Solomon o convolucionales) que entrelazan redundancia de tal forma que el receptor puede deducir exactamente qué bits cambiaron de estado y corregirlos. Esto es fundamental en enlaces donde la latencia hace inviable pedir una retransmisión.  
+  
 ---
 
 # Inciso 4
