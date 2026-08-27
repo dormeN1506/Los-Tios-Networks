@@ -79,4 +79,43 @@ Una vez encontrado nuestro patrón, podemos determinar la trama que nos correspo
 * Longitud de la carga útil (LENGTH): El byte que le sigue a la secuencia es 01 en color verde. Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
 * Carga útil (PAYLOAD): Como la longitud es 1, tomamos solamente el byte siguiente el de color rosa, que es 63. Si traducimos el valor hexadecimal 63 a texto mediante la tabla ASCII, obtenemos la letra minúscula 'c'.
 
-**b)** Si repetimos este proceso para todos los grupos obtenemos finalmente una url que nos envia a un short de YouTube `https://www.youtube.com/shorts/dbbe_ln6Lnw`.
+**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una url que nos envia a un short de YouTube `https://www.youtube.com/shorts/dbbe_ln6Lnw`.
+
+Para automatizar la repetición del proceso nos válimos del siguiente script al que le pasamos un array con los 5 primeros caracteres de cada grupo:
+
+```python
+
+def find_and_reorder_payloads(targets):
+    all_payloads = []
+
+    with open('frames.bin', 'rb') as f:
+        data = f.read()
+
+    for target_bytes in targets:
+        offset = data.find(target_bytes)
+
+        if offset == -1:
+            continue  # No se encontró este target, saltar al siguiente
+
+        if offset + 7 > len(data):
+            continue  # No hay espacio para SEQ + LENGTH
+
+        seq = data[offset + 5]  # 1 byte después del target (5 bytes)
+        length = data[offset + 6]  # 1 byte después del SEQ
+
+        if offset + 7 + length > len(data):
+            continue  # No hay espacio para el payload
+
+        payload = data[offset + 7 : offset + 7 + length]
+        all_payloads.append({
+            'SEQ': seq,
+            'PAYLOAD_STR': payload.decode('latin-1', errors='replace')
+        })
+
+    # Ordenar por SEQ
+    all_payloads.sort(key=lambda x: x['SEQ'])
+
+    # Concatenar los payloads en orden
+    message = ''.join([p['PAYLOAD_STR'] for p in all_payloads])
+    return message
+```
