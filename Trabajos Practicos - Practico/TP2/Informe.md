@@ -62,6 +62,65 @@ Los sistemas de transmisión digital combaten los errores generados por el ruido
 
 # Inciso 4
 
+**a)** Sincronización en comunicación digital
+
+La **sincronización** es necesaria para que el receptor pueda interpretar correctamente la señal que recibe. Permite saber cuándo comienza y termina cada bit y también cuánto dura, de manera que los datos puedan ser muestreados correctamente.
+
+Hay dos tipos principales:
+
+* **Sincronización de bits:** Permite al receptor saber cuándo debe leer cada bit de la señal. Es importante que el reloj del emisor y el del receptor estén coordinados. Si existe una pequeña diferencia entre ambos relojes, con el tiempo los momentos de muestreo se van desplazando y pueden aparecer errores.
+
+* **Sincronización de trama:** Permite saber dónde comienza y dónde termina una trama completa. La sincronización de bits permite interpretar cada `0` y `1`, mientras que la sincronización de trama permite saber cómo agrupar esos bits para formar una unidad de información.
+
+**b)** Trama (*frame*) y sus componentes
+
+Una **trama (*frame*)** es un conjunto de bits que se utiliza para transportar información a través de una red. Además de los datos que se quieren enviar, contiene información que ayuda a controlar y organizar la comunicación.
+
+Una trama normalmente está formada por tres partes:
+
+* **Encabezado (*header*):** Se encuentra al principio de la trama y contiene información de control. Por ejemplo, puede incluir las direcciones de origen y destino, números de secuencia u otros datos necesarios para el protocolo.
+
+* **Carga útil (*payload*):** Es la información que realmente se quiere transmitir. Puede contener datos provenientes de las capas superiores.
+
+* **Tráiler (*trailer*):** Se encuentra al final de la trama. Normalmente contiene información utilizada para detectar errores, como el **FCS**, que puede utilizar un **CRC** para comprobar si los datos llegaron correctamente.
+
+**c)** Función del preámbulo
+
+El **preámbulo** sirve para avisarle al receptor que está por comenzar una trama y ayudarlo a sincronizarse con la señal del emisor.
+
+Por ejemplo, en **Ethernet (IEEE 802.3)** se utiliza un patrón de bits alternados entre `0` y `1`, que permite que el receptor pueda sincronizar correctamente su reloj y prepararse para recibir la trama.
+
+El preámbulo no forma parte de los datos que se quieren transmitir, sino que es información adicional utilizada para facilitar la comunicación.
+
+**d)** Métodos para determinar dónde termina una trama
+
+Existen diferentes formas de determinar cuándo termina una trama.
+
+* Longitud fija
+
+En este caso, todas las tramas tienen un tamaño determinado. El receptor sabe de antemano cuántos bytes tiene que recibir.
+
+Un ejemplo es **ATM**, donde las celdas tienen siempre **53 octetos**: 5 corresponden a la cabecera y 48 a los datos.
+
+* Campo indicador de longitud
+
+Otra posibilidad es incluir en la propia trama un campo que indique su longitud.
+
+De esta forma, el receptor primero lee ese campo y luego sabe cuántos bytes tiene que recibir para completar la trama. Un ejemplo es **IPv4**, que tiene un campo llamado **Longitud total**.
+
+* Caracteres o secuencias delimitadoras
+
+También se pueden utilizar determinados bits o caracteres para indicar dónde empieza o termina una trama.
+
+Por ejemplo, en **HDLC** se utiliza la secuencia:
+
+`01111110`
+
+Esta secuencia se conoce como **Flag** y se utiliza para marcar los límites de la trama.
+
+Para evitar que esta misma secuencia aparezca dentro de los datos y sea interpretada como el final de la trama, se utiliza la **inserción de bits**. Esta técnica agrega un `0` después de cinco `1` consecutivos.
+
+También existen protocolos que utilizan caracteres especiales como delimitadores para indicar el final de los datos.
 
 
 ---
