@@ -54,9 +54,9 @@ Además, la `SNR` y el `BER` guardan una relación inversa. Un valor elevado de 
 
 Los sistemas de transmisión digital combaten los errores generados por el ruido del canal (como el ruido impulsivo o térmico) mediante la adición de redundancia controlada a la información original a nivel de software o hardware. Esto se implementa a través de dos enfoques principales:
 
-* Detección: Se agregan bits adicionales a los datos transmitidos para verificar su integridad en el receptor. Ejemplos como el bit de paridad, sumas de verificación (Checksum) y el control de redundancia cíclica (CRC). Todos estos métodos de detección son realizados por el receptor, al aplicar el algoritmo de verificación, si obtiene un valor distinto al esperado, detecta que la trama fue corrompida.
+* **Detección:** Se agregan bits adicionales a los datos transmitidos para verificar su integridad en el receptor. Ejemplos como el bit de paridad, sumas de verificación (Checksum) y el control de redundancia cíclica (CRC). Todos estos métodos de detección son realizados por el receptor, al aplicar el algoritmo de verificación, si obtiene un valor distinto al esperado, detecta que la trama fue corrompida.
 
-* Corrección: Una vez detectado el error, el sistema puede recuperar la información de dos maneras. Mediante técnicas ARQ (Automatic Repeat reQuest), el receptor simplemente descarta la trama y solicita al emisor su retransmisión. En enlaces donde la retransmisión es inviable por alta latencia, se utilizan técnicas FEC (Forward Error Correction). Se emplean códigos matemáticos avanzados (como códigos de Hamming, Reed-Solomon o convolucionales) que entrelazan redundancia de tal forma que el receptor puede deducir exactamente qué bits cambiaron de estado y corregirlos. Esto es fundamental en enlaces donde la latencia hace inviable pedir una retransmisión.  
+* **Corrección:** Una vez detectado el error, el sistema puede recuperar la información de dos maneras. Mediante técnicas ARQ (Automatic Repeat reQuest), el receptor simplemente descarta la trama y solicita al emisor su retransmisión. En enlaces donde la retransmisión es inviable por alta latencia, se utilizan técnicas FEC (Forward Error Correction). Se emplean códigos matemáticos avanzados (como códigos de Hamming, Reed-Solomon o convolucionales) que entrelazan redundancia de tal forma que el receptor puede deducir exactamente qué bits cambiaron de estado y corregirlos. Esto es fundamental en enlaces donde la latencia hace inviable pedir una retransmisión.  
   
 ---
 
@@ -133,12 +133,12 @@ También existen protocolos que utilizan caracteres especiales como delimitadore
 
 Una vez encontrado nuestro patrón, podemos determinar la trama que nos corresponde.
 
-* Firma del grupo (GROUP): Los bytes resaltados en azul son 6c 6f 73 2d 74, que efectivamente corresponden a "los-t" en código ASCII.
-* Número de secuencia (SEQ): El byte inmediatamente posterior a la firma es 0e resaltado en rojo. Si convertimos este valor hexadecimal a decimal, obtenemos 14. Esto significa que la información de este paquete va en la posición 14 del mensaje final.
-* Longitud de la carga útil (LENGTH): El byte que le sigue a la secuencia es 01 en color verde. Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
+* **Firma del grupo (GROUP):** Los bytes resaltados en azul son 6c 6f 73 2d 74, que efectivamente corresponden a "los-t" en código ASCII.
+* **Número de secuencia (SEQ):** El byte inmediatamente posterior a la firma es 0e resaltado en rojo. Si convertimos este valor hexadecimal a decimal, obtenemos 14. Esto significa que la información de este paquete va en la posición 14 del mensaje final.
+* **Longitud de la carga útil (LENGTH):** El byte que le sigue a la secuencia es 01 en color verde. Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
 * Carga útil (PAYLOAD): Como la longitud es 1, tomamos solamente el byte siguiente el de color rosa, que es 63. Si traducimos el valor hexadecimal 63 a texto mediante la tabla ASCII, obtenemos la letra minúscula 'c'.
 
-**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una url que nos envia a un short de YouTube `https://www.youtube.com/shorts/dbbe_ln6Lnw`.
+**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una url que nos envia a un short de YouTube [https://www.youtube.com/shorts/dbbe_ln6Lnw](https://www.youtube.com/shorts/dbbe_ln6Lnw).
 
 Para automatizar la repetición del proceso nos válimos del siguiente script al que le pasamos un array con los 5 primeros caracteres de cada grupo:
 
