@@ -52,15 +52,129 @@ Además, la `SNR` y el `BER` guardan una relación inversa. Un valor elevado de 
 
 # Inciso 3
 
+Los sistemas de transmisión digital combaten los errores generados por el ruido del canal (como el ruido impulsivo o térmico) mediante la adición de redundancia controlada a la información original a nivel de software o hardware. Esto se implementa a través de dos enfoques principales:
 
+* **Detección:** Se agregan bits adicionales a los datos transmitidos para verificar su integridad en el receptor. Ejemplos como el bit de paridad, sumas de verificación (Checksum) y el control de redundancia cíclica (CRC). Todos estos métodos de detección son realizados por el receptor, al aplicar el algoritmo de verificación, si obtiene un valor distinto al esperado, detecta que la trama fue corrompida.
 
+* **Corrección:** Una vez detectado el error, el sistema puede recuperar la información de dos maneras. Mediante técnicas ARQ (Automatic Repeat reQuest), el receptor simplemente descarta la trama y solicita al emisor su retransmisión. En enlaces donde la retransmisión es inviable por alta latencia, se utilizan técnicas FEC (Forward Error Correction). Se emplean códigos matemáticos avanzados (como códigos de Hamming, Reed-Solomon o convolucionales) que entrelazan redundancia de tal forma que el receptor puede deducir exactamente qué bits cambiaron de estado y corregirlos. Esto es fundamental en enlaces donde la latencia hace inviable pedir una retransmisión.  
+  
 ---
 
 # Inciso 4
 
+**a)** Sincronización en comunicación digital
+
+La **sincronización** es necesaria para que el receptor pueda interpretar correctamente la señal que recibe. Permite saber cuándo comienza y termina cada bit y también cuánto dura, de manera que los datos puedan ser muestreados correctamente.
+
+Hay dos tipos principales:
+
+* **Sincronización de bits:** Permite al receptor saber cuándo debe leer cada bit de la señal. Es importante que el reloj del emisor y el del receptor estén coordinados. Si existe una pequeña diferencia entre ambos relojes, con el tiempo los momentos de muestreo se van desplazando y pueden aparecer errores.
+
+* **Sincronización de trama:** Permite saber dónde comienza y dónde termina una trama completa. La sincronización de bits permite interpretar cada `0` y `1`, mientras que la sincronización de trama permite saber cómo agrupar esos bits para formar una unidad de información.
+
+**b)** Trama (*frame*) y sus componentes
+
+Una **trama (*frame*)** es un conjunto de bits que se utiliza para transportar información a través de una red. Además de los datos que se quieren enviar, contiene información que ayuda a controlar y organizar la comunicación.
+
+Una trama normalmente está formada por tres partes:
+
+* **Encabezado (*header*):** Se encuentra al principio de la trama y contiene información de control. Por ejemplo, puede incluir las direcciones de origen y destino, números de secuencia u otros datos necesarios para el protocolo.
+
+* **Carga útil (*payload*):** Es la información que realmente se quiere transmitir. Puede contener datos provenientes de las capas superiores.
+
+* **Tráiler (*trailer*):** Se encuentra al final de la trama. Normalmente contiene información utilizada para detectar errores, como el **FCS**, que puede utilizar un **CRC** para comprobar si los datos llegaron correctamente.
+
+**c)** Función del preámbulo
+
+El **preámbulo** sirve para avisarle al receptor que está por comenzar una trama y ayudarlo a sincronizarse con la señal del emisor.
+
+Por ejemplo, en **Ethernet (IEEE 802.3)** se utiliza un patrón de bits alternados entre `0` y `1`, que permite que el receptor pueda sincronizar correctamente su reloj y prepararse para recibir la trama.
+
+El preámbulo no forma parte de los datos que se quieren transmitir, sino que es información adicional utilizada para facilitar la comunicación.
+
+**d)** Métodos para determinar dónde termina una trama
+
+Existen diferentes formas de determinar cuándo termina una trama.
+
+* Longitud fija
+
+En este caso, todas las tramas tienen un tamaño determinado. El receptor sabe de antemano cuántos bytes tiene que recibir.
+
+Un ejemplo es **ATM**, donde las celdas tienen siempre **53 octetos**: 5 corresponden a la cabecera y 48 a los datos.
+
+* Campo indicador de longitud
+
+Otra posibilidad es incluir en la propia trama un campo que indique su longitud.
+
+De esta forma, el receptor primero lee ese campo y luego sabe cuántos bytes tiene que recibir para completar la trama. Un ejemplo es **IPv4**, que tiene un campo llamado **Longitud total**.
+
+* Caracteres o secuencias delimitadoras
+
+También se pueden utilizar determinados bits o caracteres para indicar dónde empieza o termina una trama.
+
+Por ejemplo, en **HDLC** se utiliza la secuencia:
+
+`01111110`
+
+Esta secuencia se conoce como **Flag** y se utiliza para marcar los límites de la trama.
+
+Para evitar que esta misma secuencia aparezca dentro de los datos y sea interpretada como el final de la trama, se utiliza la **inserción de bits**. Esta técnica agrega un `0` después de cinco `1` consecutivos.
+
+También existen protocolos que utilizan caracteres especiales como delimitadores para indicar el final de los datos.
 
 
 ---
 
 # Inciso 5
 
+**a)** Nuestro nombre de grupo es 'Los-Tios-Network' si nos quedamos solo con los primeros 5 caracteres en lower case queda de la siguiente manera 'los-t' debemos pasarlo a hexadecimal para obtener nuestros 40 bits de GROUP:  **l = 0x6C, o = 0x6F, s = 0x73, - = 0x2D, t = 0x74**
+
+<img width="843" height="99" alt="image" src="https://github.com/user-attachments/assets/baae4e7b-2576-4df4-9ae0-d99e1b80b94b" />
+
+Una vez encontrado nuestro patrón, podemos determinar la trama que nos corresponde.
+
+* **Firma del grupo (GROUP):** Los bytes resaltados en azul son 6c 6f 73 2d 74, que efectivamente corresponden a "los-t" en código ASCII.
+* **Número de secuencia (SEQ):** El byte inmediatamente posterior a la firma es 0e resaltado en rojo. Si convertimos este valor hexadecimal a decimal, obtenemos 14. Esto significa que la información de este paquete va en la posición 14 del mensaje final.
+* **Longitud de la carga útil (LENGTH):** El byte que le sigue a la secuencia es 01 en color verde. Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
+* Carga útil (PAYLOAD): Como la longitud es 1, tomamos solamente el byte siguiente el de color rosa, que es 63. Si traducimos el valor hexadecimal 63 a texto mediante la tabla ASCII, obtenemos la letra minúscula 'c'.
+
+**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una url que nos envia a un short de YouTube [https://www.youtube.com/shorts/dbbe_ln6Lnw](https://www.youtube.com/shorts/dbbe_ln6Lnw).
+
+Para automatizar la repetición del proceso nos válimos del siguiente script al que le pasamos un array con los 5 primeros caracteres de cada grupo:
+
+```python
+
+def find_and_reorder_payloads(targets):
+    all_payloads = []
+
+    with open('frames.bin', 'rb') as f:
+        data = f.read()
+
+    for target_bytes in targets:
+        offset = data.find(target_bytes)
+
+        if offset == -1:
+            continue  # No se encontró este target, saltar al siguiente
+
+        if offset + 7 > len(data):
+            continue  # No hay espacio para SEQ + LENGTH
+
+        seq = data[offset + 5]  # 1 byte después del target (5 bytes)
+        length = data[offset + 6]  # 1 byte después del SEQ
+
+        if offset + 7 + length > len(data):
+            continue  # No hay espacio para el payload
+
+        payload = data[offset + 7 : offset + 7 + length]
+        all_payloads.append({
+            'SEQ': seq,
+            'PAYLOAD_STR': payload.decode('latin-1', errors='replace')
+        })
+
+    # Ordenar por SEQ
+    all_payloads.sort(key=lambda x: x['SEQ'])
+
+    # Concatenar los payloads en orden
+    message = ''.join([p['PAYLOAD_STR'] for p in all_payloads])
+    return message
+```
