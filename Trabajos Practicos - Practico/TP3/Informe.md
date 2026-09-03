@@ -30,6 +30,11 @@ Sus campos principales son:
 **d)** El campo EtherType permite identificar qué protocolo de capa superior está siendo transportado dentro de la trama Ethernet. Por ejemplo, puede indicar que el contenido corresponde a IPv4, IPv6 o ARP. De esta manera, el receptor sabe cómo interpretar los datos encapsulados y a qué protocolo entregarlos.
 
 # Inciso 2
+## Análisis con Wireshark
+
+Se seleccionó una trama Ethernet con un paquete IPv6 encapsulado.
+
+![Captura utilizada para el análisis](Multimedia/Ejercicio2.png)
 
 **a)** *Direcciones MAC de origen y destino*
 
