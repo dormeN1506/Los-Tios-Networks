@@ -28,3 +28,23 @@ Sus campos principales son:
 * FCS/CRC: permite detectar errores que hayan ocurrido durante la transmisión de la trama.
 
 **d)** El campo EtherType permite identificar qué protocolo de capa superior está siendo transportado dentro de la trama Ethernet. Por ejemplo, puede indicar que el contenido corresponde a IPv4, IPv6 o ARP. De esta manera, el receptor sabe cómo interpretar los datos encapsulados y a qué protocolo entregarlos.
+
+# Inciso 2
+
+**a)** *Direcciones MAC de origen y destino*
+
+En la trama Ethernet seleccionada, la dirección MAC de origen es 04:7c:16:42:ae:b4, identificada por Wireshark como MicroStarINT_42:ae:b4, correspondiente a la interfaz de red de nuestra computadora.
+La dirección MAC de destino es f8:79:28:96:a5:7e, identificada por Wireshark como zte_96:a5:7e. Esta corresponde al router ZTE de nuestra red local, que en esta comunicación funciona como gateway para poder salir hacia Internet.
+
+**b)** *Direcciones IP de origen y destino*
+
+Dentro de la trama Ethernet se encuentra encapsulado un paquete IPv6. La dirección IPv6 de origen corresponde a nuestra computadora (2803:9800:..., censurada en la captura), mientras que la dirección IPv6 de destino es 2800:3f0:4002:815::200a, correspondiente al host remoto con el cual se está realizando la comunicación.
+
+**c)** *Comparación entre MAC e IP*
+
+Las direcciones MAC y las direcciones IP no representan lo mismo. Las direcciones MAC trabajan en la capa de enlace y se utilizan para entregar la trama dentro del enlace o red local. En cambio, las direcciones IP trabajan en la capa de red e identifican el origen y el destino de la comunicación a través de distintas redes.
+En nuestra captura se puede observar esta diferencia: la MAC destino corresponde al router ZTE, ya que es el siguiente dispositivo al que nuestra computadora debe entregar la trama dentro de la red local, mientras que la IPv6 destino corresponde al servidor remoto al que realmente queremos llegar a través de Internet.
+
+**d)** *EtherType*
+
+El campo EtherType de la trama tiene el valor 0x86dd, lo que indica que el protocolo encapsulado dentro de la trama Ethernet es IPv6. De esta manera, al recibir la trama, la capa de enlace puede determinar que los datos contenidos deben ser procesados por el protocolo IPv6 de la capa de red.
