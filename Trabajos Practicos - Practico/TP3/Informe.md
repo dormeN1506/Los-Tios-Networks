@@ -50,6 +50,45 @@ Dentro de la trama Ethernet se encuentra encapsulado un paquete IPv6. La direcci
 Las direcciones MAC y las direcciones IP no representan lo mismo. Las direcciones MAC trabajan en la capa de enlace y se utilizan para entregar la trama dentro del enlace o red local. En cambio, las direcciones IP trabajan en la capa de red e identifican el origen y el destino de la comunicación a través de distintas redes.
 En nuestra captura se puede observar esta diferencia: la MAC destino corresponde al router ZTE, ya que es el siguiente dispositivo al que nuestra computadora debe entregar la trama dentro de la red local, mientras que la IPv6 destino corresponde al servidor remoto al que realmente queremos llegar a través de Internet.
 
+# Inciso 3
+**a)** El problema que resuelve TCP que Ethernet ni IP logran es la supervision de bloques de datos para asegurar que todos se entreguen de forma fiable.
+Muchas aplicaciones aplicaciones requieren de un protocolo extremo-a-extremo fiable.Aunque, las haya algunas que pueden prescindir de ellas y usar otros protocolos como solo IP.
+
+**b)** *Campos de metadata en frame TCP*
+- Puertos de destino: Estos 2 valores identifican a los puntos de emisión y recepción, la combinacion de una dirección IP y un puerto es llamada Socket.
+- Número de secuencia: El protocolo TCP numera secuencialmente los segmentos que envía a un destino, en caso de que lleguen desordenados, este puerto destino puede reordenarlos
+- Número de ACK: Contiene el valor del siguiente número de secuencia que el emisor del segmento espera recibir.
+-  Longitud de cabecera: Especifica el tamaño de la cabecera en palabras de 32 bits.
+-  Reservado: Para uso futuro. Debe estar a 0.
+-  Tamaño de ventana: Tamaño de la ventana de recepción que especifica el número máximo de bytes que pueden ser metidos en el buffer de recepción o dicho de otro modo, el número máximo de bytes pendientes de asentimiento. Es un sistema de control de flujo.
+-  Suma de verificación: Checksum utilizado para la comprobación de errores tanto en la cabecera como en los datos.
+-  Puntero urgente: Cantidad de bytes desde el número de secuencia que indica el lugar donde acaban los datos urgentes.
+- Opciones: Nos permite añadir características no cubiertas por la cabecera fija.
+- Relleno: Se utiliza para asegurarse que la cabecera acaba con un tamaño múltiplo de 32 bits.
+
+**c)** *Three y Four way Handshake*
+
+Three way Handshake : Es un proceso utilizado por el protocolo TCP para establecer una conexion fiable entre un emisor y un receptor previo al comienzo de la transmision de bloques de datos. Sincroniza números de secuencias y se asegura que ambos puntos esten lintos
+para el intercambio de datos.
+
+En resumen, este handshake consiste en 3 pasos: Primero, se envia al receptor un segmento con la flag SYN indicando la intención de iniciar una comunicacion del emisor, segundo, el receptor 
+responde con las flags SYN y ACK, este úiltimo representa la afirmacion del receptor para el intercambio de datos, por ultimo, el emisor confirma la recepción de la respuesta y se inicia la transferencía de datos. 
+
+Four way Handshake: A diferencia de un 3-way handshake,que inicia una comunicación TCP, el 4-way handshake se usa para terminar una comunicación del mismo protocolo.
+Dado que TCP es bidireccional, cada extremo debe finalizar su propio envío por separado.Para ello, un extremo envía un segmento con el flag FIN y el otro responde con un ACK, luego, el segundo extremo envia su propio segmento con FIN, el cual es confirmado con un último
+ACK por parte del primero, terminando asi la comunicación
+
+
+**d)** *Envio de paquete y uso de Wireshark*
+
+
+![Captura del cliente y servido TCP de Packet Sender](Multimedia/ClienteP3.png)
+
+
+![Captura de wireshark donde se observan el 3way y el 4way handshake](Multimedia/HandshakeP3.png)
+
+![Captura de la carga util del paquete](Multimedia/CargaUtilP3.png)
+
 **d)** *EtherType*
 
 El campo EtherType de la trama tiene el valor 0x86dd, lo que indica que el protocolo encapsulado dentro de la trama Ethernet es IPv6. De esta manera, al recibir la trama, la capa de enlace puede determinar que los datos contenidos deben ser procesados por el protocolo IPv6 de la capa de red.
