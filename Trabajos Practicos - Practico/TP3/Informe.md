@@ -81,11 +81,15 @@ ACK por parte del primero, terminando asi la comunicación
 
 **d)** *Envio de paquete y uso de Wireshark*
 
+Cliente y servidor TCP de Packet Sender
 
-![Captura del cliente y servido TCP de Packet Sender](Multimedia/ClienteP3.png)
+![Captura del cliente y servidor TCP de Packet Sender](Multimedia/ClienteP3.png)
 
+3way y el 4way handshake.
 
 ![Captura de wireshark donde se observan el 3way y el 4way handshake](Multimedia/HandshakeP3.png)
+
+Carga util del paquete.
 
 ![Captura de la carga util del paquete](Multimedia/CargaUtilP3.png)
 
