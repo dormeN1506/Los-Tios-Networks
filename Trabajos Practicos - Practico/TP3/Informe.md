@@ -96,3 +96,68 @@ Carga util del paquete.
 **d)** *EtherType*
 
 El campo EtherType de la trama tiene el valor 0x86dd, lo que indica que el protocolo encapsulado dentro de la trama Ethernet es IPv6. De esta manera, al recibir la trama, la capa de enlace puede determinar que los datos contenidos deben ser procesados por el protocolo IPv6 de la capa de red.
+
+# Inciso 4
+
+Nos conectamos al servidor TCP en la nube provisto por la cátedra usando Packet Sender y capturamos la sesión completa con Wireshark.
+
+### Parámetros de la conexión
+
+* **IP Servidor:** `34.136.251.235`
+* **Puerto Servidor:** `5555`
+* **IP Cliente (local):** `192.168.1.82`
+* **Puerto Cliente:** `50583` (puerto efímero asignado a la conexión)
+* **Protocolo:** TCP
+* **Delimitador de mensajes:** `\\r` (`0x0D` en hex)
+
+### Interacción con el servidor (Packet Sender)
+
+Configuramos Packet Sender en modo **Persistent TCP** marcando la opción de incluir `\\r` al final de cada envío para no cerrar el socket en cada comando.
+
+**Comandos enviados y respuestas obtenidas:**
+
+| Comando | Envío (ASCII) | Respuesta del Servidor |
+| :--- | :--- | :--- |
+| `hola` | `hola\\r` | `hola :)` |
+| `ping` | `ping\\r` | `pong` |
+| `Los-Tios-Networks` | `Los-Tios-Networks\\r` | `seq: 15, payload: a` |
+| `tic` | `tic\\r` | `toc` |
+| `status` | `status\\r` | `leyendo tu historial de búsquedas (que horror, buscá ayuda profesional)` |
+
+*Datos para completar en la planilla compartida de Drive:*
+* **Nombre de grupo:** `Los-Tios-Networks`
+* **Respuesta recibida:** `seq: 15, payload: a`
+
+### Captura y Análisis de Tráfico en Wireshark
+
+Para aislar el tráfico de la prueba en Wireshark, aplicamos el filtro `tcp.port == 5555`.
+
+#### **Handshake inicial (3-Way Handshake)**
+1. **SYN (Paquete 36567):** La PC local (`192.168.1.82:50583`) envía `[SYN]` al servidor (`34.136.251.235:5555`) para iniciar la sesión (`Seq=0`).
+2. **SYN, ACK (Paquete 36573):** El servidor responde confirmando con `[SYN, ACK]` (`Seq=0`, `Ack=1`).
+3. **ACK (Paquete 36574):** La PC local envía `[ACK]` final (`Seq=1`, `Ack=1`), dejando la conexión en estado `ESTABLISHED`.
+
+#### **Inspección del paquete del grupo (Paquete 40158)**
+Seleccionando el paquete número **40158** en Wireshark, se pueden verificar los campos de las distintas capas:
+
+* **Capa de Enlace (Ethernet II):**
+  * MAC Origen: `64:6c:80:9e:1e:a5` (Placa Wi-Fi local)
+  * MAC Destino: `b0:ec:dd:e7:5f:e3` (Router / Gateway)
+* **Capa de Red (IPv4):**
+  * IP Origen: `192.168.1.82`
+  * IP Destino: `34.136.251.235`
+  * Protocolo encapsulado: TCP (6)
+* **Capa de Transporte (TCP):**
+  * Puerto Origen: `50583` | Puerto Destino: `5555`
+  * Flags: `PSH, ACK` (El flag `PSH` le indica al sistema que entregue los datos inmediatamente a la aplicación)
+  * Largo de carga útil: 18 bytes
+* **Capa de Aplicación (Payload):**
+  * Hexadecimal: `4c 6f 73 2d 54 69 6f 73 2d 4e 65 74 77 6f 72 6b 73 0d`
+  * ASCII: `Los-Tios-Networks\\r`
+
+---
+
+### Observaciones de la práctica
+
+* **Uso del carácter `\\r`:** Si no se envía el retorno de carro (`\\r`), el servidor no procesa el comando porque espera ese delimitador específico para saber dónde termina la instrucción.
+* **Seguridad y visibilidad:** Como se trata de un socket TCP plano sin cifrado (sin capa TLS/SSL), los mensajes viajan en texto claro y son completamente visibles mediante un sniffer de red.
