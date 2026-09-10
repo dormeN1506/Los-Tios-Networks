@@ -97,6 +97,16 @@ Carga util del paquete.
 
 El campo EtherType de la trama tiene el valor 0x86dd, lo que indica que el protocolo encapsulado dentro de la trama Ethernet es IPv6. De esta manera, al recibir la trama, la capa de enlace puede determinar que los datos contenidos deben ser procesados por el protocolo IPv6 de la capa de red.
 
+**f)**
+La conclusión principal es que los protocolos base de la red (como TCP o IP) **no integran cifrado por defecto y transmiten la información en texto plano**.
+
+De esto se derivan tres puntos clave:
+
+1. **Falta de confidencialidad:** Cualquier persona conectada a la misma red local (o en un nodo intermedio del trayecto) puede usar un sniffer como Wireshark y ver exactamente lo que enviamos, desde comandos hasta contraseñas o datos personales.
+2. **Riesgo de manipulación (*Man-in-the-Middle*):** Como la carga útil no viaja cifrada ni firmada criptográficamente, un atacante no solo puede leer los paquetes, sino que también podría interceptarlos y alterarlos en el camino.
+3. **Necesidad de cifrado en capas superiores:** Por todo esto, hoy en día es obligatorio usar protocolos que cifren el tráfico (como HTTPS/TLS, SSH o VPNs). Así, aunque un tercero capture los paquetes con Wireshark, solo verá un bloque de datos ilegibles.
+
+
 # Inciso 4
 
 Nos conectamos al servidor TCP en la nube provisto por la cátedra usando Packet Sender y capturamos la sesión completa con Wireshark.
