@@ -112,6 +112,8 @@ Nos conectamos al servidor TCP en la nube provisto por la cátedra usando Packet
 
 ### Interacción con el servidor (Packet Sender)
 
+![Captura Packet Sender](Multimedia/Punto4packetsender.PNG)
+
 Configuramos Packet Sender en modo **Persistent TCP** marcando la opción de incluir `\\r` al final de cada envío para no cerrar el socket en cada comando.
 
 **Comandos enviados y respuestas obtenidas:**
@@ -129,6 +131,8 @@ Configuramos Packet Sender en modo **Persistent TCP** marcando la opción de inc
 * **Respuesta recibida:** `seq: 15, payload: a`
 
 ### Captura y Análisis de Tráfico en Wireshark
+
+![Captura Wireshark](Multimedia/Punto4wireshark.PNG)
 
 Para aislar el tráfico de la prueba en Wireshark, aplicamos el filtro `tcp.port == 5555`.
 
