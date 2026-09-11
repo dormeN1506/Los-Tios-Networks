@@ -1,4 +1,4 @@
-# Trabajo Práctico N° 2: Redes de Computadoras
+# Trabajo Práctico N° 3: Redes de Computadoras
 
 **Integrantes:**
 * Arias, Daniel Andrés
