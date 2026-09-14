@@ -18,15 +18,15 @@ Tenemos estos datos:
 
 Cantidad de disquetes =  ${ \frac{10000}{0,03} ≈ 333,33\  disquetes }$
 
-Cantidad de bits por disquetes = $ 1,4\  bits × 10⁶\ bytes × 8 = 11200000\ bits = 11,2 × 10⁶\  bits $
+Cantidad de bits por disquetes = ${ 1,4\  bits × 10⁶\ bytes × 8 = 11200000\ bits = 11,2 × 10⁶\  bits }$
 
-Cantidad de bits en total = $ 333,33 × 11,2 × 10⁶ =  3,73 × 10¹² bits $
+Cantidad de bits en total = ${ 333,33 × 11,2 × 10⁶ =  3,73 × 10¹² bits }$
 
-$ t = \frac{d}{v} = \frac{5000 km}{1000 km/h} = 5h $
+${ t = \frac{d}{v} = \frac{5000 km}{1000 km/h} = 5h }$
 
-$ t = 5 × 3600 seg = 18000 seg $
+${ t = 5 × 3600 seg = 18000 seg }$
 
-$ velocidad  = \frac{3,73 × 10¹²}{18000} ≈ 2,07 × 10^8 bits/s ≈ 207Mpbs $
+${ velocidad  = \frac{3,73 × 10¹²}{18000} ≈ 2,07 × 10^8 bits/s ≈ 207Mpbs }$
 
 ### Ejercicio 4.2
 
@@ -36,24 +36,24 @@ señal ruido para la línea en dB.
 
 Tenemos estos datos:
 - pérdida: 20dB.
-- $ P_{entrada} = 0,5 \ W $
-- $ P_{salida} = 4,5 \ W $
+- ${ P_{entrada} = 0,5 \ W }$
+- ${ P_{salida} = 4,5 \ W }$
 
 Potencia de salida:
 
-$ L_{dB}=10\log(\frac{P_{entrada}}{P_{salida}}) $
+${ L_{dB}=10\log(\frac{P_{entrada}}{P_{salida}}) }$
 
-$ P_{salida}=P_{entrada} × 10^{-L/10} =0,5 × 10^{-20/10} =0,5 × 10^{-2}=0,005\ W $
+${ P_{salida}=P_{entrada} × 10^{-L/10} =0,5 × 10^{-20/10} =0,5 × 10^{-2}=0,005\ W }$
 
 Relación S/N:
 
-$ SNR=\frac{P_S}{P_N} =\frac{0,005}{4,5}=0,001111 $
+${ SNR=\frac{P_S}{P_N} =\frac{0,005}{4,5}=0,001111 }$
 
 Pasamos a dB:
 
-$ SNR_{dB}=10\log(0,001111) $
+${ SNR_{dB}=10\log(0,001111) }$
 
-$ SNR_{dB}\approx -29,54\ dB $ 
+${ SNR_{dB}\approx -29,54\ dB }$
 
 El resultado negativo nos indica que la potencia del ruido es mucho mayor que la potencia de la señal de salida por lo que la señal queda prácticamente tapada por el ruido.
 
