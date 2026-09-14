@@ -16,7 +16,7 @@ Tenemos estos datos:
 - Peso de cada disquete: 30 g = 0,03 kg
 - velocidad ***(v)***: 1.000 km/h
 
-Cantidad de disquetes =  $ \frac{10000}{0,03} ≈ 333,33\  disquetes $
+Cantidad de disquetes =  ${ \frac{10000}{0,03} ≈ 333,33\  disquetes }$
 
 Cantidad de bits por disquetes = $ 1,4\  bits × 10⁶\ bytes × 8 = 11200000\ bits = 11,2 × 10⁶\  bits $
 
