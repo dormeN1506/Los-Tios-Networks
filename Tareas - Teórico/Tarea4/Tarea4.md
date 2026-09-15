@@ -211,7 +211,7 @@ Según el modelo ideal del ejercicio, el empaste recibiría una señal de aproxi
 ### Ejercicio 4.9 
 Para comparar las dos alternativas utilizamos la ecuacion de perdida en el espacio libre 
 
-![Formula de perdida en el espacio libre](media/Screenshot2026-09-14211040.png)
+![Forumula de perdida en el espacio libre](Media/Formula.png)
 
 
 Donde: 
@@ -273,7 +273,7 @@ Las dos alternativas producen el mismo resultado. Tanto al duplicar la frecuenci
 ### Ejercicio 4.10 
 La tabla completa queda: 
 
-![Tabla 4.10](media/Screenshot2026-09-14202918.png)
+![Tabla 4.10](Media/Tabla.png)
 
 #### Conclusion 
 En radio no se restan 6 dB por cada kilómetro, sino cada vez que se duplica la distancia. En el cable se pierden 3 dB por cada kilómetro recorrido.verifica que no haya errores graves
