@@ -206,3 +206,84 @@ f = 6 × 10^10 Hz
 f = 60 GHz
 
 Según el modelo ideal del ejercicio, el empaste recibiría una señal de aproximadamente 60 GHz.
+
+
+### Ejercicio 4.9 
+Para comparar las dos alternativas utilizamos la ecuacion de perdida en el espacio libre 
+
+![Formula de perdida en el espacio libre](media/Screenshot2026-09-14211040.png)
+
+
+Donde: 
+* Pt: es la potencia transmitida
+* Pr: es la potencia recibida
+* f : es la frecuencia
+* Ar y At : son las areas efectivas de las antenas
+* d es la distancia entre los satelites
+* c: es la velocidad de propagación en el espacio libre
+  
+*Alternativa duplicando la frecuencia*
+
+La nueva frecuencia es:
+
+f2 = 2 × f1
+
+al estar elevado al cuadrado:
+
+f2^2 = (2 × f1)^2 = 4 × f1^2
+
+Reemplazando en la ecuación: 
+
+Pt / Pr2 = (c × d)^2 / ((2 × f1)^2 × Ar1 × At1) 
+
+Pt / Pr2 = (c × d)^2 / (4 × f1^2 × Ar1 × At1) 
+
+Pt / Pr2 = (1 / 4) × (Pt / Pr1)
+
+Por lo tanto, el cociente lineal Pt / Pr se reduce a la cuarta parte. Como la potencia transmitida permanece constante, la potencia recibida aumenta cuatro veces: 
+
+Pr2 = 4 × Pr1 
+
+*Alternativa duplicando el area efectiva de ambas antenas* 
+
+Ar2 = 2 × Ar1 At2 = 2 × At1 
+
+El producto de las areas queda: 
+
+Ar2 × At2 = (2 × Ar1) × (2 × At1) 
+
+Ar2 × At2 = 4 × Ar1 × At1 
+
+Reemplazando en la ecuación: 
+
+Pt / Pr2 = (c × d)^2 / (f1^2 × (2 × Ar1) × (2 × At1)) 
+
+Pt / Pr2 = (c × d)^2 / (4 × f1^2 × Ar1 × At1) 
+
+Pt / Pr2 = (1 / 4) × (Pt / Pr1) 
+
+Por lo tanto, el cociente lineal Pt / Pr también se reduce a la cuarta parte y la potencia recibida aumenta cuatro veces: 
+
+Pr2 = 4 × Pr1 
+
+#### conclusion: 
+Las dos alternativas producen el mismo resultado. Tanto al duplicar la frecuencia como al duplicar el área efectiva de ambas antenas, el cociente lineal Pt / Pr se reduce a la cuarta parte y la potencia recibida aumenta cuatro veces. Ninguna alternativa proporciona mayor potencia que la otra. La potencia final es el 400 % de la original, lo que representa un incremento del 300 % o una mejora de aproximadamente 6,02 dB.
+
+
+### Ejercicio 4.10 
+La tabla completa queda: 
+
+![Tabla 4.10](media/Screenshot2026-09-14202918.png)
+
+#### Conclusion 
+En radio no se restan 6 dB por cada kilómetro, sino cada vez que se duplica la distancia. En el cable se pierden 3 dB por cada kilómetro recorrido.verifica que no haya errores graves
+
+
+
+
+
+
+
+
+
+
