@@ -62,8 +62,8 @@ El resultado negativo nos indica que la potencia del ruido es mucho mayor que la
 
 Datos:
 
-- $ P_{Transmisión}=100 \ W $
-- $ P_{Recepción}=1 \ W $
+- ${ P_{Transmisión}=100 \ W }$
+- ${ P_{Recepción}=1 \ W }$
 
 | Medio | Frecuencia | Atenuación |
 |---|---:|---:|
@@ -73,21 +73,21 @@ Datos:
 | Fibra óptica | 180 a 370 THz | 0,2 a 0,5 dB/km |
 
 
-Pérdida máxima: $ 10\log(\frac{P_{Transmisión}}{P_{Recepción}}) = 10\log(\frac{100}{1}) = 20 \ dB $
+Pérdida máxima: ${ 10\log(\frac{P_{Transmisión}}{P_{Recepción}}) = 10\log(\frac{100}{1}) = 20 \ dB }$
 
-Longitud máxima L: $ \frac{20}{\alpha} $
+Longitud máxima L: ${ \frac{20}{\alpha} }$
 
-a). L =  $ \frac{20}{3} = 6,67 \ Km $
+a). L =  ${ \frac{20}{3} = 6,67 \ Km }$
 
-b). L =  $ \frac{20}{3} = 6,67 \ Km $
+b). L =  ${ \frac{20}{3} = 6,67 \ Km }$
 
-c). L =  $ \frac{20}{7} = 2,86 \ Km $
+c). L =  ${ \frac{20}{7} = 2,86 \ Km }$
 
-d). L =  $ \frac{20}{7} = 2,86 \ Km $
+d). L =  ${ \frac{20}{7} = 2,86 \ Km }$
 
-d). L =  $ \frac{20}{7} = 2,86 \ Km $
+d). L =  ${ \frac{20}{7} = 2,86 \ Km }$
 
-e). L =  $ \frac{20}{7} = 0,2 \ Km $
+e). L =  ${ \frac{20}{7} = 0,2 \ Km }$
 
 
 ### Ejercicio 4.4
