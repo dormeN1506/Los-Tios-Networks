@@ -331,4 +331,5 @@ $$1{,}0003 \cdot \sin(60^\circ) = 1{,}3333 \cdot \sin(\theta_2)$$
 $$1{,}0003 \cdot 0{,}8660 = 1{,}3333 \cdot \sin(\theta_2) \implies 0{,}8662 = 1{,}3333 \cdot \sin(\theta_2)$$
 $$\sin(\theta_2) = \frac{0{,}8662}{1{,}3333} \approx 0{,}6497$$
 $$\theta_2 = \arcsin(0{,}6497) \approx 40{,}52^\circ$$
-*(Si se requiere el ángulo medido respecto al horizonte en el medio acuático: $90^\circ - 40{,}52^\circ = 49{,}48^\circ$).*
+
+*Si se requiere el ángulo medido respecto al horizonte en el medio acuático $\implies 90^\circ - 40{,}52^\circ = 49{,}48^\circ$*
