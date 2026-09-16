@@ -1,5 +1,14 @@
 # Redes de Computadoras
 
+**Integrantes:**
+* Arias, Daniel Andrés
+* Garzón, Pablo
+* Gutierrez, Patricio
+* Fernández y Fernández, Sergio Ezequiel
+* Loza Denardi, Gabriel Jeremías
+* Rocatagliatta, Leandro Agustin
+* Zambellini, Matías Manuel
+
 ## Introducción
 En el presente trabajo se realizará un breve repaso del capítulo 4 del libro *Stallings - Comunicaciones y Redes de Computadores, 7.ª edición*. Se abordarán los medios de transmisión, la propagación de ondas electromagnéticas y la relación entre frecuencia, longitud de onda, distancia y tamaño de las antenas.
 
@@ -322,5 +331,4 @@ $$1{,}0003 \cdot \sin(60^\circ) = 1{,}3333 \cdot \sin(\theta_2)$$
 $$1{,}0003 \cdot 0{,}8660 = 1{,}3333 \cdot \sin(\theta_2) \implies 0{,}8662 = 1{,}3333 \cdot \sin(\theta_2)$$
 $$\sin(\theta_2) = \frac{0{,}8662}{1{,}3333} \approx 0{,}6497$$
 $$\theta_2 = \arcsin(0{,}6497) \approx 40{,}52^\circ$$
-
 *(Si se requiere el ángulo medido respecto al horizonte en el medio acuático: $90^\circ - 40{,}52^\circ = 49{,}48^\circ$).*
