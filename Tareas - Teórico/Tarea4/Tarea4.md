@@ -318,6 +318,7 @@ $$\theta_1 = 90^\circ - 30^\circ = 60^\circ$$
 
 Sustituyendo en la Ley de Snell:
 $$1{,}0003 \cdot \sin(60^\circ) = 1{,}3333 \cdot \sin(\theta_2)$$
+
 $$1{,}0003 \cdot 0{,}8660 = 1{,}3333 \cdot \sin(\theta_2) \implies 0{,}8662 = 1{,}3333 \cdot \sin(\theta_2)$$
 $$\sin(\theta_2) = \frac{0{,}8662}{1{,}3333} \approx 0{,}6497$$
 $$\theta_2 = \arcsin(0{,}6497) \approx 40{,}52^\circ$$
