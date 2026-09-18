@@ -16,7 +16,7 @@
 **a)** En la figura se representa el fenómeno conocido como **Efecto Doppler** en ondas electromagnéticas. Que es el cambio aparente en la frecuencia de la onda debido al movimiento relativo entre la fuente emisora y el receptor. En cuanto a sus principales características se encuentran:
 
 * **1) Movimiento relativo:** Es necesario que exista una velocidad de movimiento relativa entre el emisor y el receptor. Si ambos se mueven a la vez y a la misma velocidad, el fenómeno no se manifiesta.
-* **2) Compresión/Dilatación de la onda:** Cuando el emisor y el receptor se aproximan entre sí, los frentes de onda se comprimen produciendo un aumento en la frecuencia percibida y menor longitud de onda (sonido más agudo). Cuando se alejan, los frentes se distancian produciendo una disminución en la frecuencia percibida y mayor longitud de onda (sonido más grave).
+* **2) Compresión/Dilatación de la onda:** Cuando el emisor y el receptor se aproximan entre sí, los frentes de onda se comprimen produciendo un aumento en la frecuencia percibida y menor longitud de onda. Cuando se alejan, los frentes se distancian produciendo una disminución en la frecuencia percibida y mayor longitud de onda.
 * **3) Universalidad ondulatoria:** Es capaz de afectar a cualquier tipo de movimiento ondulatorio.
 
 **b)** Las bandas de transmisión más afectadas por este fenómeno son las de alta frecuencia (`UHF` - `SHF` - `EHF`) desde $1\text{ GHz}$ a $30\text{ GHz}$. Esto se debe a que el corrimiento absoluto está dado por la expresión $\Delta f = f0\cdot\frac{Vr}{c}$, directamente proporcional a la frecuencia de la portadora $f0$; donde puede verse que a mayor frecuencia, mayor es el corrimiento en $\text{Hz}$.
@@ -134,11 +134,11 @@ También existen protocolos que utilizan caracteres especiales como delimitadore
 Una vez encontrado nuestro patrón, podemos determinar la trama que nos corresponde.
 
 * **Firma del grupo (GROUP):** Los bytes resaltados en azul son 6c 6f 73 2d 74, que efectivamente corresponden a "los-t" en código ASCII.
-* **Número de secuencia (SEQ):** El byte inmediatamente posterior a la firma es 0e resaltado en rojo. Si convertimos este valor hexadecimal a decimal, obtenemos 14. Esto significa que la información de este paquete va en la posición 14 del mensaje final.
-* **Longitud de la carga útil (LENGTH):** El byte que le sigue a la secuencia es 01 en color verde. Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
-* Carga útil (PAYLOAD): Como la longitud es 1, tomamos solamente el byte siguiente el de color rosa, que es 63. Si traducimos el valor hexadecimal 63 a texto mediante la tabla ASCII, obtenemos la letra minúscula 'c'.
+* **Número de secuencia (SEQ):** El byte inmediatamente posterior a la firma es 0e (resaltado en rojo). Si convertimos este valor hexadecimal a decimal, obtenemos 14. Esto significa que la información de este paquete va en la posición 14 del mensaje final.
+* **Longitud de la carga útil (LENGTH):** El byte que le sigue a la secuencia es 01 (color verde). Esto nos indica que el payload que transporta este paquete tiene una longitud de exactamente 1 byte.
+* **Carga útil (PAYLOAD):** Como la longitud es 1, tomamos solamente el byte siguiente (color rosa), que es 63. Si traducimos el valor hexadecimal 63 a texto mediante la tabla ASCII, obtenemos la letra minúscula 'c'.
 
-**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una url que nos envia a un short de YouTube [https://www.youtube.com/shorts/dbbe_ln6Lnw](https://www.youtube.com/shorts/dbbe_ln6Lnw).
+**b)** Si repetimos este proceso para todos los grupos extrayendo todos los payloads y reordenando de acuerdo al número de sequencia podremos obtener finalmente una URL que nos envía al siguiente short de YouTube: [https://www.youtube.com/shorts/dbbe_ln6Lnw](https://www.youtube.com/shorts/dbbe_ln6Lnw).
 
 Para automatizar la repetición del proceso nos válimos del siguiente script al que le pasamos un array con los 5 primeros caracteres de cada grupo:
 
