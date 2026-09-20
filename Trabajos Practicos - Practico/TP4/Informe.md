@@ -72,90 +72,83 @@ El `tagging` es necesario para el `Trunking` ya mencionado (permite al switch re
 
 # Inciso 2
 
-## 1. Topología y Configuración Inicial (Incisos a - g)
-
-Para resolver este ejercicio, armamos la topología solicitada en Cisco Packet Tracer compuesta por dos computadoras (`PC-A` y `PC-B`) conectadas a dos switches (`SW-1` y `SW-2`), interconectados mediante un enlace troncal en sus puertos `FastEthernet 0/1`.
+### Topología Física
+Se implementó la topología requerida utilizando dos switches Cisco 2960 (`SW-1` y `SW-2`) y dos computadoras (`PC-A` y `PC-B`), conectadas mediante cables directos y cruzados según las interfaces especificadas, más sus respectivas conexiones de consola para administración local.
 
 ![Topología Armada](Multimedia/Red%20armada.JPG)
 
+* **Configuración de cada PC:**
 
-### a) Configuración de nombres
-Ingresamos a la terminal de cada switch para asignarles sus respectivos hostnames (`sw1` y `sw2`).
-
-### b) y c) Configuración y encriptación de contraseñas
-Definimos las contraseñas de consola, modo privilegiado (`enable secret`) y líneas VTY, aplicando posteriormente el comando de encriptación general (`service password-encryption`).
-
-### d) Configuración de red VLAN inicial
-Asignamos las direcciones IP iniciales de gestión sobre la VLAN 1 por defecto según la tabla de ruteo provista (`192.168.1.11` para SW-1 y `192.168.1.12` para SW-2).
-
-### e) y f) Desactivación de puertos libres y guardado
-Apagamos administrativamente todas las interfaces físicas que no se encontraban en uso en los switches y guardamos los cambios ejecutando `write memory`.
-
-### g) Testeo inicial de comunicación
-Realizamos pings de prueba iniciales entre las computadoras antes de segmentar el tráfico en VLANs.
-
-* **Configuración de las computadoras:**
-![Configuraciones de PCs](Multimedia/Configuraciones_PCs.png)
-* **Configuración de los Switches:**
-![Configuraciones de Switches](Multimedia/Config_Switches.png)
-* **Primera Prueba de Ping:** Puede verse que ambas computadoras están correctamente conectadas mediante los switches.
-![Primera Prueba de Ping](Multimedia/Primera%20Prueba%20de%20Ping.png)
+![Config_PCs](Multimedia/Configs_IP.png)
 
 ---
 
-## 2. Creación de VLANs y Listado (Incisos h - i)
+### Incisos a, b y c: Configuración Básica y Seguridad
+Se accedió a la configuración global de ambos switches a través de las terminales de las PCs. Se asignaron los nombres `sw1` y `sw2`, se configuraron contraseñas para el modo privilegiado (`secret`), puerto de consola y líneas virtuales (`VTY`), y finalmente se habilitó el servicio de encriptación de contraseñas (`service password-encryption`).
 
-### h) Creación de VLANs en ambos switches
-Creamos las tres VLANs institucionales solicitadas en ambos equipos (`sw1` y `sw2`):
-* **VLAN 10:** Laboratorio
-* **VLAN 20:** Bar
-* **VLAN 99:** Management
-
-### i) Visualización con show vlan brief y VLAN por defecto
-Al ejecutar el comando `show vlan brief`, se visualiza la lista de VLANs activas. 
-* **VLAN utilizada por defecto:** Todos los puertos físicos de los switches pertenecen inicialmente a la **VLAN 1 (default)**.
-
-![Creación de VLANs](Multimedia/VLANs%20creadas%20en%20Switches.png)
+![Configuración Básica](Multimedia/a%20-%20b%20-%20c_PCs.png)
 
 ---
 
-## 3. Asignación de Puertos de Acceso y Enlaces Troncales (Inciso j)
+### Incisos d, e y f: Configuración IP Inicial y Apagado de Puertos
+Se configuraron las direcciones IP en la `VLAN 1` (por defecto) según la tabla de enrutamiento provista para ambos switches. Posteriormente, utilizando el comando `interface range`, se procedió a apagar (`shutdown`) todos los puertos físicos que no forman parte de la topología activa. La configuración se guardó exitosamente en memoria (`write memory`).
 
-### j) Asignación de la PC-A a la VLAN Laboratorio
-Configuramos el puerto `FastEthernet 0/6` del `sw1` en modo acceso y lo asociamos a la VLAN 10, además de habilitar el puerto `FastEthernet 0/1` como enlace troncal (*trunk*).
-
-![Configuración de Switches](Multimedia/Cambios%20de%20puertos%20de%20VLANs%20en%20Switches.png)
+![Apagado de puertos e IP](Multimedia/Conf_Switches.png)
 
 ---
 
-## 4. Reubicación de la Gestión a la VLAN 99 y Verificación (Incisos k - l)
+### Inciso g: Primera Prueba de Conectividad
+Se realizaron pruebas de ping entre la `PC-A` y la `PC-B`. El resultado arrojó un **100% de éxito (0% loss)** en ambos sentidos. En este punto, la comunicación fluye correctamente ya que todos los equipos y puertos pertenecen a la VLAN 1 nativa y no existe segmentación lógica.
 
-### k) Configuración de la IP de gestión en la VLAN 99 (SW-1)
-Removemos la dirección IP de administración de la interfaz `Vlan1` y la configuramos de manera exclusiva en la interfaz `Vlan99` para el `sw1` (`192.168.1.11`).
-
-### l) Verificación e interpretación de estados
-Visualizamos los estados mediante `show vlan brief` y `show ip interface brief`.
-* **Interpretación:** La interfaz lógica `Vlan1` queda sin dirección IP (*unassigned*), separando el tráfico de usuarios del tráfico de gestión. La interfaz `Vlan99` adquiere la IP asignada con un estado operativo en `up/up`.
-
-![Cambios de IP en VLAN99](Multimedia/Cambios%20de%20IP%20en%20VLANs99%20en%20Switches.png)
+![Primera prueba de ping](Multimedia/Primera_Prueba_Ping.png)
 
 ---
 
-## 5. Configuración de SW-2 y Pruebas de Conectividad Finales (Incisos m - n)
+### Incisos h e i: Creación y Verificación de VLANs
+Se crearon las VLANs 10 (`Laboratorio`), 20 (`Bar`) y 99 (`Management`) en ambos dispositivos.
 
-### m) Asignación de la PC-B y repetición de gestión en SW-2
-* Asignamos el puerto `FastEthernet 0/18` del `sw2` a la **VLAN 10 (Laboratorio)**.
-* Repetimos el procedimiento del inciso k para el `sw2`, removiendo la IP de la `Vlan1` y configurando la IP `192.168.1.12` en la `Vlan99`.
+Al ejecutar el comando `show vlan brief` para verificar el estado, se responde a la pregunta teórica del inciso **i**: **La VLAN utilizada por defecto es la VLAN 1 (default)**. Esto se evidencia al observar que la totalidad de las interfaces FastEthernet y GigabitEthernet se encuentran asignadas inicialmente a esta VLAN.
 
-### n) Pruebas de conectividad mediante pings e interpretación
-Las pruebas de conectividad arrojaron un **100% de éxito** tanto entre las PCs (PC-A a PC-B) como entre las interfaces de gestión de los switches (SW-1 a SW-2).
+![Creación de VLANs](Multimedia/VLANs_Creadas.png)
 
-* **Interpretación de los resultados:** Este éxito en el primer intento se debe a que durante la configuración de los puertos en el inciso **j**, aplicamos por instinto el comando `switchport mode trunk` en el enlace entre los switches (como se ve en las capturas de ese punto). Lo hicimos basándonos en la teoría, ya que entendíamos que sin un enlace troncal las VLANs iban a quedar aisladas en cada switch.
-Como resultado de esto, los pings finales nos dieron exitosos en el primer intento. Entendemos que el ejercicio estaba planteado para que omitiéramos ese comando, viéramos fallar la red (`Request timed out`) y concluyéramos que faltaba el trunk. Aunque nos adelantamos a ese paso, dejamos asentadas nuestras capturas porque demuestran la red funcionando correctamente con la solución ya aplicada.
+---
 
-* **Análisis del comportamiento esperado por defecto:** Si hubiésemos seguido la guía de forma estricta sin configurar el enlace troncal, la comunicación habría fallado (`Request timed out`). Esto hubiese ocurrido porque el puerto `Fa0/1` habría permanecido en modo acceso en la VLAN 1, lo cual provoca que el switch descarte todo el tráfico etiquetado perteneciente a las VLANs 10 y 99, aislando las redes localmente.
+### Inciso j: Asignación de PC-A a VLAN 10
+Se configuró el puerto `Fa0/6` del `sw1` en modo acceso y se lo asignó específicamente a la VLAN 10 (`Laboratorio`). La ejecución del comando `show vlan brief` confirma que el puerto `Fa0/6` migró de la VLAN 1 a la VLAN 10 exitosamente.
 
-![Prueba final de ping](Multimedia/Pruebas%20finales%20de%20ping.png)
+![Asignación puerto sw1](Multimedia/Cambio_Puerto_Fa0-6_VLAN_Laboratorio.JPG)
+
+---
+
+### Incisos k y l: Migración de IP de Management en sw1 e Interpretación
+Se removió la dirección IP asignada previamente a la `Vlan 1` y se reconfiguró la interfaz lógica `Vlan 99` con la IP `192.168.1.11` correspondiente al SW-1.
+
+**Interpretación de resultados:**
+*   **show vlan brief:** Muestra la VLAN 99 activa, conteniendo la lógica de administración del dispositivo.
+*   **show ip interface brief:** Verifica que la interfaz `Vlan1` quedó en estado *unassigned*, mientras que la `Vlan99` adquirió correctamente la IP de gestión. Es normal y esperado que el protocolo de la `Vlan99` figure temporalmente en estado *down*, ya que aún no posee un puerto físico activo habilitado para cursar su tráfico.
+
+![Migración IP SW1](Multimedia/Cambio_IP_SW1.JPG)
+
+---
+
+### Inciso m: Asignación de PC-B y Migración de IP en sw2
+Se replicaron las configuraciones lógicas en el `sw2`: se asignó el puerto `Fa0/18` (`PC-B`) a la VLAN 10 (`Laboratorio`) en modo acceso, se eliminó la IP de la `Vlan 1`, y se configuró la IP `192.168.1.12` en la interfaz lógica `Vlan 99`. Los resultados de la verificación coinciden con lo analizado en el SW-1.
+
+![Migración IP SW2](Multimedia/Cambio_IP_SW2.JPG)
+
+---
+
+### Inciso n: Pruebas de Conectividad Finales e Interpretación
+Al llegar a este punto y realizar los comandos `ping` habiendo seguido estrictamente los pasos de la guía, se obtienen los siguientes resultados:
+*   El ping entre las computadoras (`PC-A` y `PC-B`) **falla** (`Request timed out`).
+*   El ping entre las IPs de gestión de los switches **falla** (`Success rate is 0 percent`).
+
+![Falla de ping](Multimedia/Falla_Ping.png)
+
+**Interpretación del problema:** 
+Esta falla de comunicación es el comportamiento esperado debido a la segmentación lógica impuesta. Las PCs ahora se encuentran aisladas en la VLAN 10 y las interfaces de administración en la VLAN 99. Sin embargo, el enlace físico que interconecta los switches (`Fa0/1`) permanece en su configuración por defecto como puerto de acceso en la VLAN 1. 
+
+Al no haberse configurado este enlace de interconexión como un puerto troncal (`modo Trunk`, bajo el estándar IEEE 802.1Q), el puerto descarta y no permite el cruce del tráfico etiquetado correspondiente a las VLANs 10 y 99. En consecuencia, las tramas quedan aisladas localmente dentro de cada switch sin alcanzar el otro extremo de la red.
 
 ---
 
