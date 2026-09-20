@@ -148,11 +148,10 @@ Visualizamos los estados mediante `show vlan brief` y `show ip interface brief`.
 * Repetimos el procedimiento del inciso k para el `sw2`, removiendo la IP de la `Vlan1` y configurando la IP `192.168.1.12` en la `Vlan99`.
 
 ### n) Pruebas de conectividad mediante pings e interpretación
-Realizamos las validaciones finales de la red:
-1. **Ping entre PC-A y PC-B:** La prueba desde el Command Prompt arrojó un **0% de pérdida de paquetes**. 
-   * *Interpretación:* Las computadoras se comunican de forma transparente a través de switches físicos distintos debido a que comparten la misma VLAN 10 y el enlace troncal (*trunk*) transporta el tráfico etiquetado correctamente.
-2. **Ping entre SW-1 y SW-2:** La prueba de conectividad de administración desde la terminal del `sw1` hacia la IP `192.168.1.12` del `sw2` respondió con éxito total (`100%`).
-   * *Interpretación:* Confirma que la red de gestión sobre la VLAN 99 opera sin inconvenientes entre ambos dispositivos de red.
+Las pruebas de conectividad arrojaron un **100% de éxito** tanto entre las PCs (PC-A a PC-B) como entre las interfaces de gestión de los switches (SW-1 a SW-2).
+
+* **Interpretación de los resultados:** Este éxito en el primer intento se debe a que, durante el inciso **j**, nos adelantamos y configuramos la interconexión de los switches (puerto `Fa0/1`) como enlace troncal (`switchport mode trunk`). 
+* **Análisis del comportamiento esperado por defecto:** Si hubiésemos seguido la guía de forma estricta sin configurar el enlace troncal, la comunicación habría fallado (Request timed out). Esto hubiese ocurrido porque el puerto `Fa0/1` habría permanecido en modo acceso en la VLAN 1, lo cual provoca que el switch descarte todo el tráfico etiquetado perteneciente a las VLANs 10 y 99, aislando las redes localmente.
 
 ![Prueba final de ping](Multimedia/Pruebas%20finales%20de%20ping.png)
 
