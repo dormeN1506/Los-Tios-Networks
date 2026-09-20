@@ -150,8 +150,10 @@ Visualizamos los estados mediante `show vlan brief` y `show ip interface brief`.
 ### n) Pruebas de conectividad mediante pings e interpretación
 Las pruebas de conectividad arrojaron un **100% de éxito** tanto entre las PCs (PC-A a PC-B) como entre las interfaces de gestión de los switches (SW-1 a SW-2).
 
-* **Interpretación de los resultados:** Este éxito en el primer intento se debe a que, durante el inciso **j**, nos adelantamos y configuramos la interconexión de los switches (puerto `Fa0/1`) como enlace troncal (`switchport mode trunk`). 
-* **Análisis del comportamiento esperado por defecto:** Si hubiésemos seguido la guía de forma estricta sin configurar el enlace troncal, la comunicación habría fallado (Request timed out). Esto hubiese ocurrido porque el puerto `Fa0/1` habría permanecido en modo acceso en la VLAN 1, lo cual provoca que el switch descarte todo el tráfico etiquetado perteneciente a las VLANs 10 y 99, aislando las redes localmente.
+* **Interpretación de los resultados:** Este éxito en el primer intento se debe a que durante la configuración de los puertos en el inciso **j**, aplicamos por instinto el comando `switchport mode trunk` en el enlace entre los switches (como se ve en las capturas de ese punto). Lo hicimos basándonos en la teoría, ya que entendíamos que sin un enlace troncal las VLANs iban a quedar aisladas en cada switch.
+Como resultado de esto, los pings finales nos dieron exitosos en el primer intento. Entendemos que el ejercicio estaba planteado para que omitiéramos ese comando, viéramos fallar la red (`Request timed out`) y concluyéramos que faltaba el trunk. Aunque nos adelantamos a ese paso, dejamos asentadas nuestras capturas porque demuestran la red funcionando correctamente con la solución ya aplicada.
+
+* **Análisis del comportamiento esperado por defecto:** Si hubiésemos seguido la guía de forma estricta sin configurar el enlace troncal, la comunicación habría fallado (`Request timed out`). Esto hubiese ocurrido porque el puerto `Fa0/1` habría permanecido en modo acceso en la VLAN 1, lo cual provoca que el switch descarte todo el tráfico etiquetado perteneciente a las VLANs 10 y 99, aislando las redes localmente.
 
 ![Prueba final de ping](Multimedia/Pruebas%20finales%20de%20ping.png)
 
