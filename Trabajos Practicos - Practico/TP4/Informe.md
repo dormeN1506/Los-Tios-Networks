@@ -154,3 +154,154 @@ Al no haberse configurado este enlace de interconexión como un puerto troncal (
 
 # Inciso 3
 
+### Topología utilizada
+
+Se armó en Packet Tracer una red LAN simulando la red interna de una aeronave. La red se dividió en tres grupos mediante VLANs:
+
+* **VLAN 10 - Turista:** acceso al servidor de entretenimiento.
+* **VLAN 20 - Business:** acceso al servidor de entretenimiento y a Internet.
+* **VLAN 99 - Administración:** acceso total.
+
+La topología está formada por un switch, un router principal (`Router Aircraft`), un router que representa al ISP, un servidor de entretenimiento y distintas PCs para cada clase.
+
+![Topología de red](Multimedia/01_Topologia_Red.png)
+
+---
+
+### Configuración del Router Aircraft
+
+Para comunicar las VLANs se utilizaron subinterfaces sobre la interfaz conectada al switch.
+
+Se configuraron:
+
+* `G0/0.10` con IP `10.10.10.1`
+* `G0/0.20` con IP `10.10.20.1`
+* `G0/0.99` con IP `10.10.99.1`
+
+Estas direcciones funcionan como gateway de cada red.
+
+También se configuró `G0/1` con la IP `200.0.0.1/30` para conectar el router con el ISP.
+
+![Interfaces Router Aircraft](Multimedia/02_Interfaces_Router_Aircraft.png)
+
+---
+
+### Configuración del switch
+
+En el switch se crearon las VLAN 10, 20 y 99.
+
+Los puertos quedaron asignados de la siguiente forma:
+
+* `Fa0/2 - Fa0/3` → VLAN 10 (Turista)
+* `Fa0/4 - Fa0/5` → VLAN 20 (Business)
+* `Fa0/6 - Fa0/7` → VLAN 99 (Admin)
+
+El puerto `Fa0/1`, que conecta el switch con el Router Aircraft, se configuró como trunk para transportar las tres VLAN.
+
+![VLANs y Trunk](Multimedia/03_VLANs_Trunk_Switch.png)
+
+---
+
+### Configuración DHCP
+
+En el Router Aircraft se configuró DHCP para entregar direcciones IP automáticamente a los equipos.
+
+Se utilizaron tres pools:
+
+* Turista: `10.10.10.0/24`
+* Business: `10.10.20.0/24`
+* Admin: `10.10.99.0/24`
+
+También se reservaron las primeras direcciones de cada red para no asignarlas automáticamente.
+
+![Configuración DHCP](Multimedia/04_Config_DHCP.png)
+
+---
+
+### Configuración de subinterfaces y NAT
+
+Las subinterfaces del Router Aircraft se configuraron utilizando `dot1Q` para asociar cada una con su VLAN correspondiente.
+
+Las interfaces internas fueron configuradas con `ip nat inside`, mientras que la interfaz conectada al ISP se configuró con `ip nat outside`.
+
+![Configuración de subinterfaces](Multimedia/05_Config_Subinterfaces.png)
+
+Se configuró NAT para las redes Business y Administración, permitiendo que ambas tengan acceso a la red externa usando la dirección de la interfaz `G0/1`.
+
+La red Turista no fue incluida en esta configuración.
+
+![Configuración NAT](Multimedia/06_Config_NAT_ACL.png)
+
+---
+
+### Configuración de ACL para Turista
+
+Se creó una ACL para limitar el acceso de la VLAN 10.
+
+La regla permite que los equipos Turista accedan a la red `10.10.99.0/24`, donde se encuentra el servidor de entretenimiento, pero bloquea el tráfico hacia otros destinos.
+
+La ACL se aplicó sobre la subinterfaz `G0/0.10`.
+
+También se agregó una ruta por defecto hacia el ISP utilizando la dirección `200.0.0.2`.
+
+![Configuración ACL y ruta](Multimedia/07_Config_Ruta_ACL.png)
+
+---
+
+### Pruebas desde Turista
+
+Desde una PC Turista se realizaron pruebas hacia el servidor y hacia el ISP.
+
+El ping al servidor `10.10.99.10` respondió correctamente.
+
+En cambio, el ping hacia `200.0.0.2` fue bloqueado, como se esperaba.
+
+![Pruebas Turista](Multimedia/08_Pruebas_Turista.png)
+
+---
+
+### Pruebas desde Business
+
+Desde una PC Business se comprobó acceso al servidor de entretenimiento y también al ISP.
+
+Los dos pings respondieron correctamente.
+
+![Pruebas Business](Multimedia/09_Pruebas_Business.png)
+
+---
+
+### Pruebas desde Administración
+
+Desde la PC de Administración se realizaron pings a equipos Turista, Business y al servidor.
+
+Todos respondieron correctamente.
+
+![Pruebas Administración](Multimedia/10_Pruebas_Admin_Internas.png)
+
+También se probó el acceso al ISP y el resultado fue correcto.
+
+![Prueba ISP desde Admin](Multimedia/11_Pruebas_Admin_ISP.png)
+
+---
+
+### Servidor de entretenimiento
+
+El servidor fue configurado con la IP fija `10.10.99.10`.
+
+Se activó el servicio HTTP y se modificó la página principal para simular un sistema de entretenimiento llamado **AirConnect Entertainment**.
+
+Desde una PC Turista se pudo acceder correctamente mediante el navegador.
+
+![Servidor de entretenimiento](Multimedia/12_HTTP_AirConnect_Entertainment.png)
+
+---
+
+### Conclusión
+
+La red quedó dividida correctamente en tres VLANs con distintos niveles de acceso.
+
+La clase Turista puede acceder al servidor local pero no al ISP. La clase Business puede acceder al servidor y a la red externa, mientras que Administración tiene acceso a todos los segmentos.
+
+Las pruebas realizadas dieron los resultados esperados.
+
+---
