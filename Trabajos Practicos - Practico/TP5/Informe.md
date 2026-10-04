@@ -28,14 +28,23 @@ A diferencia de TCP y UDP, ICMP no transporta datos de aplicaciones. El payload 
 * **Identificador (2 bytes):** Un valor único que permite al emisor reconocer qué aplicación generó la solicitud.
 * **Número de Secuencia (2 bytes):** Un contador que se incrementa en cada envío para poder emparejar exactamente cada respuesta con su pregunta original y calcular la latencia de ese paquete individual.
 
-A continuación voy a mostrar el paso a paso que se realizo para poder capturar paquetes icmp por Wireshark y de donde obtenemos los datos para poder completar la tabla
+A continuación se mostrara el paso a paso que se realizo para poder capturar paquetes icmp por Wireshark y de donde obtenemos los datos para poder completar la tabla
 ![ipconfig](Multimedia/01_ipconfigall.png) ![ping](Multimedia/02_ping.png) ![request](Multimedia/03_filtrorequest.png) ![reply](Multimedia/04_filtroreply.png) ![google](Multimedia/05_filtrogoogle.png) ![ethernet2](Multimedia/06_ethernet2.png) ![ipv4](Multimedia/07_ipv4.png) ![payload](Multimedia/08_icmppayload.png) ![tabla](Multimedia/09_tabla.png)
 
-**a)**
+**a)** En la imagen podemos ver que la MAC de destino es la misma que la de nuestro gateway (imágenes anteriores) ya que el alcance de una dirección MAC es meramente local. Con la dirección MAC de un dispositivo solo podremos ir hasta el siguiente router, cambiando cada vez que realice un salto, en cambio con la IP que viaja encapsulada en la trama esta si se mantendrá desde el origen hasta el final.
+![mac](Multimedia/10_mac.png)
 
+**b)** En Ethernet tenemos que las direcciones MAC de origen y de destino se invierten, pero se mantiene el campo Type ya que ambos siguen transportando un paquete IPv4. Para IP sucede lo mismo con las direcciones, estas están invertidas pero mantienen el mismo campo de protocolo. El campo Type de ICMP varia, siendo 8 para Echo Request y 0 para Echo Reply, el checksum cambia ya que se recalcula y los Identifier (BE/LE) y Sequence Number (BE/LE) se mantienen iguales, debido a que estos se utilizan para que el dispositivo pueda emparejar la petición que envió con la respuesta.
+![seq](Multimedia/11_seq.png)
 
+**c)** Como podemos ver en la imagen el payload se encuentra en ICMP dentro de Data, en este caso como fue enviado desde Windows tiene 32 bytes y contiene datos arbitrarios ya que solo se utilizan para verificar que llegue la misma información en el reply. La principal diferencia es que en Linux el payload es de 56 bytes. 
+![payload](Multimedia/12_payload.png)
 
+**d)** TTL (Time to Live) es un mecanismo en el cual cada paquete tiene un valor que cada vez que hace un salto entre routers este le descuenta 1, esto se hace por que si se el paquete esta en un bucle en algún momento llegara a 0 y se destruira. En nuestra captura el valor es 128 para el request y 119 para el reply, el valor TTL de reply no es el original ya que este valor que recibimos es la resta luego de haber pasado por todos los routers necesarios para llegar a la pc.
+![TTL](Multimedia/13_TTL.png)
 
+**e)** 
+![datoswireshark](Multimedia/14_bytes1.png) ![caja](Multimedia/14_bytes2.png)
 
 # Inciso 2
 ##  ARP: de una IP a una dirección MAC
