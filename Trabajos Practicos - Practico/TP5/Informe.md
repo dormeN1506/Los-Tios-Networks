@@ -27,6 +27,12 @@ A diferencia de TCP y UDP, ICMP no transporta datos de aplicaciones. El payload 
 * **Checksum (16 bits):** Suma de comprobación para verificar la integridad del mensaje ICMP entero.
 * **Identificador (2 bytes):** Un valor único que permite al emisor reconocer qué aplicación generó la solicitud.
 * **Número de Secuencia (2 bytes):** Un contador que se incrementa en cada envío para poder emparejar exactamente cada respuesta con su pregunta original y calcular la latencia de ese paquete individual.
+A continuación voy a mostrar el paso a paso para poder capturar paquetes icmp por Wireshark
+![ipconfig](Multimedia/01_ipconfigall.png)
+![ping](Multimedia/02_ping.png)
+![request](Multimedia/03_filtrorequest.png)
+
+
 
 # Inciso 2
 ##  ARP: de una IP a una dirección MAC
