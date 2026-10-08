@@ -131,12 +131,14 @@ Si apareció nuevamente en el `ARP Request` ya que no se recibió una Reply al p
 
 # Inciso 4
 ##  Servidor TCP mínimo
-
+**c)**
 ![Respuestas de terminal](Multimedia/tcp_server_client.png)
 
+![respuesta wireshark](Multimedia/hola_servidor.png)
 
+**d)**
 
-
+![Tabla completa](Multimedia/Tabla4.png)
 
 
 
