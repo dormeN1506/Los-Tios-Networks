@@ -128,3 +128,18 @@ Al usar la opción **A**, aparecieron 4 paquetes `ARP Request` y no se obtuvo ni
 **d)**
 
 Si apareció nuevamente en el `ARP Request` ya que no se recibió una Reply al principio. Esto provocó que no se guarde en el caché y el sistema vuelve a mandar la Request. Por otro lado, la ventaja del uso de caché consiste en optimizar y acelerar el envío de paquetes, evitando así saturar la red con broadcast's frecuentes. Aunque, en caso de quedar una IP vieja, lo que podría ocurrir es que si se siguieran mandando paquetes a esa IP antigua, el caché sigue guardando hasta que expire.
+
+# Inciso 4
+##  Servidor TCP mínimo
+**c)**
+![Respuestas de terminal](Multimedia/tcp_server_client.png)
+
+![respuesta wireshark](Multimedia/hola_servidor.png)
+
+**d)**
+
+![Tabla completa](Multimedia/Tabla4.png)
+
+
+
+
