@@ -129,6 +129,73 @@ Al usar la opción **A**, aparecieron 4 paquetes `ARP Request` y no se obtuvo ni
 
 Si apareció nuevamente en el `ARP Request` ya que no se recibió una Reply al principio. Esto provocó que no se guarde en el caché y el sistema vuelve a mandar la Request. Por otro lado, la ventaja del uso de caché consiste en optimizar y acelerar el envío de paquetes, evitando así saturar la red con broadcast's frecuentes. Aunque, en caso de quedar una IP vieja, lo que podría ocurrir es que si se siguieran mandando paquetes a esa IP antigua, el caché sigue guardando hasta que expire.
 
+# Inciso 3
+
+## TCP y UDP "a mano" con ncat
+
+**a)** 
+
+Establecer una conexión en redes significa negociar y configurar un canal de comunicación dedicado y sincronizado entre dos dispositivos antes de intercambiar datos. 
+
+La lógica de transporte es responsabilidad de los extremos, no de la red intermedia ni los cables. Cada extremo mantiene en su kernel un bloque de estado (TCB) que incluye: números de secuencia, tamaño de ventana, buffers de envío/recepción y el estado actual de la máquina de estados
+
+**b)**
+
+Un puerto es un identificador númerico de una terminal de conexión y sirve para dirigir datos a un servicio. Un puerto TCP + la IP del equipo, identifican un programa en el equipo y los números de puerto van del 0 al 65535.
+
+**c)**
+
+Que un proceso esté escuchando en un puerto significa que ha registrado un endpoint en el kernel asociado a una tupla (IP, puerto), y que ese endpoint está en estado LISTEN. 
+
+### Experimento UDP
+
+![wireshark TCP](Multimedia/wireshark_tcp_ncat.png)
+
+![wireshark UDP](Multimedia/wireshark_udp_ncat.png)
+
+**a)** 
+
+En la captura Wireshark para UDP, el primer paquete aparece exactamente en el instante en que se presiona Enter en la terminal, no antes. No hay negociación previa a diferencia de TCP donde los 3 paquetes del handshake aparecen inmediatamente al ejecutar el comando.
+
+**b)** 
+
+Cada mensaje enviado genera un único datagrama UDP. En UDP no existe ningún mecanismo de acknowledgment: el receptor no confirma la recepción al emisor, ni se retransmite si el datagrama se pierde. Toda la responsabilidad de confiabilidad queda delegada a la capa de aplicación.
+
+**c)** 
+
+| Campo | UDP | TCP |
+|---|---|---|
+| Source Port | 2 bytes | 2 bytes |
+| Destination Port | 2 bytes | 2 bytes |
+| Sequence Number | — | 4 bytes |
+| Acknowledgment Number | — | 4 bytes |
+| Data Offset + Flags (FIN, SYN, RST, PSH, ACK, URG) | — | 2 bytes |
+| Window Size | — | 2 bytes |
+| Urgent Pointer | — | 2 bytes |
+| Length | 2 bytes | — *(TCP lo infiere del IP header)* |
+| Checksum | 2 bytes | 2 bytes |
+| Options | — | 0–40 bytes |
+| **Total** | **8 bytes (fijo)** | **20 bytes (mín.) / hasta 60 bytes** |
+
+**d)**
+
+En UDP al cerrar el cliente con Ctrl+C no se genera ningún tráfico de red y el receptor no recibe ninguna notificación. En TCP, en cambio, el kernel envía una secuencia de 4 paquetes (FIN, ACK, FIN, ACK) para cerrar la conexión de forma ordenada
+
+**e)**
+
+Para enviar la misma frase, UDP requiere 1 datagrama y TCP requiere 9 paquetes. Los 8 paquetes extra de TCP compran: 
+<ol>
+    <li>verificación de que el destino está disponible antes de enviar</li>
+    <li>confirmación de que los datos llegaron (con retransmisión ante pérdida)</li>
+    <li>cierre ordenado que notifica al peer</li>
+</ol>
+
+**f)**
+
+![wireshark sin escucha](Multimedia/wireshark_ncat_last_point.png)
+
+Cuando no hay listener, TCP responde con RST y connect() falla al instante. UDP no tiene mecanismo propio para notificar, solo se entera después de enviar, y el aviso llega por un protocolo distinto (ICMP), de forma asíncrona y no garantizada.
+
 # Inciso 4
 ##  Servidor TCP mínimo
 **c)**
