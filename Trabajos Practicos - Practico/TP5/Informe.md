@@ -177,6 +177,9 @@ Cada mensaje enviado genera un único datagrama UDP. En UDP no existe ningún me
 | Options | — | 0–40 bytes |
 | **Total** | **8 bytes (fijo)** | **20 bytes (mín.) / hasta 60 bytes** |
 
+En wireshark podemos verificar viendo el largo total del mensaje en bytes restando los bytes del payload, lo que nos debe dar un resultado de 8:
+![wireshark UDP header length](Multimedia/udp_head_length.png)
+
 **d)**
 
 En UDP al cerrar el cliente con Ctrl+C no se genera ningún tráfico de red y el receptor no recibe ninguna notificación. En TCP, en cambio, el kernel envía una secuencia de 4 paquetes (FIN, ACK, FIN, ACK) para cerrar la conexión de forma ordenada
