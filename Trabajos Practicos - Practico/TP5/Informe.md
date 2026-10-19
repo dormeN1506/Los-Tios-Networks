@@ -133,19 +133,15 @@ Si apareció nuevamente en el `ARP Request` ya que no se recibió una Reply al p
 
 ## TCP y UDP "a mano" con ncat
 
-**a)** 
+**a)** Establecer una conexión en redes significa negociar y configurar un canal de comunicación dedicado y sincronizado entre dos dispositivos antes de intercambiar datos. 
 
-Establecer una conexión en redes significa negociar y configurar un canal de comunicación dedicado y sincronizado entre dos dispositivos antes de intercambiar datos. 
+La lógica de transporte es responsabilidad de los **extremos**, no de la red intermedia ni de los cables. Cada extremo mantiene en su kernel un bloque de estado (`TCB`) que incluye *números de secuencia*, *tamaño de ventana*, *buffers de envío/recepción* y el *estado actual de la máquina de estados*.
 
-La lógica de transporte es responsabilidad de los extremos, no de la red intermedia ni los cables. Cada extremo mantiene en su kernel un bloque de estado (TCB) que incluye: números de secuencia, tamaño de ventana, buffers de envío/recepción y el estado actual de la máquina de estados
+**b)** Un puerto es un identificador númerico de una terminal de conexión y sirve para dirigir datos a un servicio determinado.
 
-**b)**
+Un puerto `TCP + IP` (ambos pertenecientes al equipo) identifican un programa en el equipo. Los números de puerto van del 0 al 65535.
 
-Un puerto es un identificador númerico de una terminal de conexión y sirve para dirigir datos a un servicio. Un puerto TCP + la IP del equipo, identifican un programa en el equipo y los números de puerto van del 0 al 65535.
-
-**c)**
-
-Que un proceso esté escuchando en un puerto significa que ha registrado un endpoint en el kernel asociado a una tupla (IP, puerto), y que ese endpoint está en estado LISTEN. 
+**c)** Que un proceso esté escuchando en un puerto significa que ha registrado un `endpoint` en el `kernel` asociado a una tupla (IP,puerto), y que ese endpoint está en estado **LISTEN**. 
 
 ### Experimento UDP
 
@@ -153,13 +149,9 @@ Que un proceso esté escuchando en un puerto significa que ha registrado un endp
 
 ![wireshark UDP](Multimedia/wireshark_udp_ncat.png)
 
-**a)** 
+**a)** En la captura Wireshark para UDP, el primer paquete aparece exactamente en el instante en que se presiona `Enter` en la terminal, no antes. No hay negociación previa, a diferencia de TCP donde los 3 paquetes del handshake aparecen inmediatamente al ejecutar el comando.
 
-En la captura Wireshark para UDP, el primer paquete aparece exactamente en el instante en que se presiona Enter en la terminal, no antes. No hay negociación previa a diferencia de TCP donde los 3 paquetes del handshake aparecen inmediatamente al ejecutar el comando.
-
-**b)** 
-
-Cada mensaje enviado genera un único datagrama UDP. En UDP no existe ningún mecanismo de acknowledgment: el receptor no confirma la recepción al emisor, ni se retransmite si el datagrama se pierde. Toda la responsabilidad de confiabilidad queda delegada a la capa de aplicación.
+**b)** Cada mensaje enviado genera un único datagrama UDP. En UDP no existe ningún mecanismo de *acknowledgment* ya que el receptor no confirma la recepción al emisor, ni se retransmite si el datagrama se pierde. Toda la responsabilidad de confiabilidad queda delegada a la capa de aplicación.
 
 **c)** 
 
@@ -180,34 +172,34 @@ Cada mensaje enviado genera un único datagrama UDP. En UDP no existe ningún me
 En wireshark podemos verificar viendo el largo total del mensaje en bytes restando los bytes del payload, lo que nos debe dar un resultado de 8:
 ![wireshark UDP header length](Multimedia/udp_head_length.png)
 
-**d)**
+**d)** En UDP, al cerrar el cliente con `Ctrl+C` no se genera ningún tráfico de red y el receptor no recibe ninguna notificación. En TCP, en cambio, el kernel envía una secuencia de 4 paquetes (*FIN*, *ACK*, *FIN*, *ACK*) para cerrar la conexión de forma ordenada.
 
-En UDP al cerrar el cliente con Ctrl+C no se genera ningún tráfico de red y el receptor no recibe ninguna notificación. En TCP, en cambio, el kernel envía una secuencia de 4 paquetes (FIN, ACK, FIN, ACK) para cerrar la conexión de forma ordenada
-
-**e)**
-
-Para enviar la misma frase, UDP requiere 1 datagrama y TCP requiere 9 paquetes. Los 8 paquetes extra de TCP compran: 
+**e)** Para enviar la misma frase, UDP requiere 1 datagrama y TCP requiere 9 paquetes. Los 8 paquetes extra de TCP compran: 
 <ol>
-    <li>verificación de que el destino está disponible antes de enviar</li>
-    <li>confirmación de que los datos llegaron (con retransmisión ante pérdida)</li>
-    <li>cierre ordenado que notifica al peer</li>
+    <li> Verificación de que el destino está disponible antes de enviar.</li>
+    <li> Confirmación de que los datos llegaron (con retransmisión ante pérdida).</li>
+    <li> Cierre ordenado que notifica al peer.</li>
 </ol>
 
 **f)**
 
 ![wireshark sin escucha](Multimedia/wireshark_ncat_last_point.png)
 
-Cuando no hay listener, TCP responde con RST y connect() falla al instante. UDP no tiene mecanismo propio para notificar, solo se entera después de enviar, y el aviso llega por un protocolo distinto (ICMP), de forma asíncrona y no garantizada.
+Cuando no hay listener, TCP responde con `RST` y **connect()** falla al instante. UDP no tiene mecanismo propio para notificar, solamente se entera después de enviar. El aviso llega por un protocolo distinto (ICMP) de forma asíncrona y no garantizada.
+
+---
 
 # Inciso 4
 ##  Servidor TCP mínimo
 **c)**
+**Respuestas de la terminal:**
 ![Respuestas de terminal](Multimedia/tcp_server_client.png)
 
+**Respuesta de Wireshark:**
 ![respuesta wireshark](Multimedia/hola_servidor.png)
 
 **d)**
-
+**Tabla:**
 ![Tabla completa](Multimedia/Tabla4.png)
 
 
