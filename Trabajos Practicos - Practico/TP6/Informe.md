@@ -169,15 +169,172 @@ No. UDP no garantiza la entrega, el orden ni la ausencia de duplicados. Cada dat
 
 UDP se utiliza, por ejemplo, en consultas DNS tradicionales, DHCP, comunicaciones multimedia en tiempo real y determinados videojuegos en línea. Resulta útil por su encabezado reducido y por evitar el establecimiento de conexión y la retransmisión obligatoria a nivel de transporte. Cada aplicación decide si necesita incorporar mecanismos adicionales de confiabilidad o control de tiempos.
 
-### Actividad final. Servidor HTTP con Python — PENDIENTE
+### Actividad final. Desarrollo de un pequeño servidor HTTP
 
-**Esta actividad todavía no se realizó y se completará en un próximo encuentro de laboratorio.** Queda pendiente documentar:
+Esta actividad se realizó con **dos computadoras propias del grupo**, sin intervención de otro grupo. Un equipo con **Ubuntu 26.04 LTS** actuó como servidor HTTP y como punto de captura con Wireshark. Un equipo con **Windows 11** actuó como cliente, mediante el navegador Google Chrome y la herramienta `curl`.
 
-1. Creación de una carpeta con al menos tres archivos de tipos diferentes.
-2. Ejecución de `python -m http.server 8000` en una computadora.
-3. Acceso desde la segunda computadora mediante `http://<IP-del-servidor>:8000/` y descarga de un archivo.
-4. Descarga de un archivo mediante `curl -O http://<IP-del-servidor>:8000/archivo.pdf`.
-5. Captura con Wireshark del tráfico de la transferencia, identificación de HTTP y del protocolo de transporte TCP.
+#### Configuración de red
 
-Al finalizar, se debe restaurar la configuración automática de direcciones IP de los equipos cuando corresponda.
+Ambos equipos se conectaron por **WiFi a la misma red doméstica**, en lugar de utilizar el cable y el switch de las actividades anteriores. La consigna de esta actividad solo requiere que la segunda computadora pueda alcanzar al servidor mediante su dirección IP, y HTTP, TCP e IP funcionan de la misma forma sobre WiFi que sobre Ethernet. Como la red WiFi ya ubicaba a ambos equipos en la misma subred, no fue necesario configurar direcciones manualmente. En la Linux la dirección se obtiene por DHCP (método `auto` de NetworkManager).
 
+| Equipo | Rol | Interfaz | Dirección IPv4 | Dirección MAC |
+|---|---|---|---|---|
+| Ubuntu 26.04 LTS | Servidor HTTP y captura | `wlp2s0` (WiFi) | `192.168.1.7/24` | `a8:6d:aa:91:8c:0f` (Intel) |
+| Windows 11 | Cliente | Wi-Fi | `192.168.1.6/24` | `5c:a6:e6:d9:95:f7` (TP-Link) |
+
+Ambas direcciones pertenecen a la red `192.168.1.0/24`, por lo que la comunicación es directa dentro de la LAN. La puerta de enlace `192.168.1.1` que figura en la Windows solo se utiliza para alcanzar otras redes y no interviene en este intercambio. La conectividad entre ambos equipos queda demostrada por el propio intercambio TCP analizado en el inciso 4: el establecimiento de una conexión requiere que los segmentos lleguen en ambos sentidos.
+
+**Evidencia: dirección IPv4 del servidor (Linux).**
+
+![Configuración de red de la Linux](Multimedia/07_red_linux.png)
+
+**Evidencia: dirección IPv4 del cliente (Windows).**
+
+![Configuración de red de la Windows](Multimedia/08_red_windows.png)
+
+#### Inciso 1. Directorio y servidor HTTP
+
+En la Linux se creó el directorio `~/servidor_tp6` con tres archivos de tipos diferentes:
+
+| Archivo | Tipo | Tamaño |
+|---|---|---:|
+| `archivo.pdf` | Documento PDF (enunciado de este TP) | 369.766 bytes |
+| `archivo.txt` | Texto plano | 45 bytes |
+| `imagen.png` | Imagen PNG | 25.443 bytes |
+
+Se utilizó un directorio dedicado porque `http.server` publica todo el contenido de la carpeta desde la que se ejecuta, incluidas sus subcarpetas, para cualquier equipo de la red. Tampoco se incluyó un archivo `index.html`: si existiera, el servidor mostraría esa página en lugar del listado de archivos.
+
+**Evidencia: contenido del directorio publicado.**
+
+![Directorio del servidor](Multimedia/10_directorio_y_servidor.png)
+
+El servidor se inició desde ese directorio con Python 3.14.4:
+
+```bash
+cd ~/servidor_tp6
+python3 -m http.server 8000
+```
+
+El servidor respondió `Serving HTTP on 0.0.0.0 port 8000`. La dirección `0.0.0.0` indica que escucha en todas las interfaces IPv4 del equipo, incluida la interfaz WiFi. Se mantuvo el puerto 8000 propuesto en la consigna, que además es el predeterminado del módulo: al ser mayor a 1024 no requiere permisos de administrador y no entra en conflicto con el puerto 80.
+
+#### Inciso 2. Acceso desde el navegador
+
+Desde la Windows se ingresó con Google Chrome a `http://192.168.1.7:8000/`. El servidor respondió con la página **"Directory listing for /"**, que lista los tres archivos. Chrome marca el sitio como **"No es seguro"** porque HTTP no cifra la comunicación. Luego se descargó `archivo.pdf`, que el navegador informa con un tamaño de 361 KB (369.766 bytes / 1024).
+
+**Evidencia: listado del directorio en el navegador del cliente.**
+
+![Listado del directorio en Chrome](Multimedia/11_navegador_listado.png)
+
+**Evidencia: descarga completada en el navegador.**
+
+![Descarga de archivo.pdf en Chrome](Multimedia/12_navegador_descarga.png)
+
+El servidor registra cada pedido en la terminal con la IP del cliente, la fecha y hora, la línea del pedido y el código de respuesta. Se observan los dos pedidos de Chrome desde `192.168.1.6`: `GET /` y `GET /archivo.pdf`, ambos con código **200**.
+
+**Evidencia: inicio del servidor y registro de los pedidos.**
+
+![Registro del servidor HTTP](Multimedia/13_log_servidor.png)
+
+#### Inciso 3. Descarga con curl
+
+Desde el Símbolo del sistema de la Windows, en la carpeta `C:\tp6`, se repitió la descarga con:
+
+```bash
+curl -v -O http://192.168.1.7:8000/archivo.pdf
+```
+
+La opción `-O` guarda el archivo con el mismo nombre que tiene en el servidor y `-v` muestra los detalles de la conexión y los encabezados intercambiados. En la salida se observa:
+
+- `Established connection to 192.168.1.7 (192.168.1.7 port 8000) from 192.168.1.6 port 64756`: la conexión TCP sale de un **puerto efímero** asignado por Windows (64756) hacia el puerto 8000 del servidor.
+- **Pedido** (líneas `>`): `GET /archivo.pdf HTTP/1.1`, con los encabezados `Host`, `User-Agent: curl/8.21.0` y `Accept: */*`.
+- **Respuesta** (líneas `<`): `HTTP/1.0 200 OK`, con `Server: SimpleHTTP/0.6 Python/3.14.4`, `Content-type: application/pdf` y `Content-Length: 369766`.
+- `HTTP 1.0, assume close after body` y, al final, `shutting down connection #0`: como el servidor responde con HTTP/1.0, la conexión se cierra después de cada respuesta. Esto se comprueba en la captura del inciso 4.
+
+Para verificar la integridad se calculó el hash SHA-256 del archivo descargado en la Windows (`certutil`) y del original en la Linux (`sha256sum`). Ambos dan el mismo valor, `d6e1f8965f59de1ee36154525e860bc7fc3cb30797ba04d7ffa423a1636bebd8`, por lo que la copia es idéntica byte a byte al original: TCP entregó los 369.766 bytes completos y en orden.
+
+**Evidencia: descarga con curl y hash del archivo recibido (Windows).**
+
+![Descarga con curl y certutil](Multimedia/14_curl_descarga.png)
+
+**Evidencia: hash del archivo original (Linux).**
+
+![Hash del archivo original](Multimedia/15_hash_original.png)
+
+#### Inciso 4. Captura con Wireshark: ¿de qué tipo es el tráfico?
+
+La captura se realizó en la Linux, sobre la interfaz `wlp2s0`, con el filtro de visualización `tcp.port == 8000`. Se capturó en el servidor porque, al ser un extremo de la conexión, recibe y envía todos los paquetes del intercambio. Se identificaron tres conexiones TCP. El tamaño de cada pedido surge de los números de secuencia del cliente:
+
+| Puerto del cliente | Aplicación | Pedido | Respuesta | Tamaño del pedido |
+|---:|---|---|---|---:|
+| 64751 | Chrome | `GET /` | `HTTP/1.0 200 OK` (`text/html`) | 472 bytes |
+| 59878 | Chrome | `GET /archivo.pdf` | `HTTP/1.0 200 OK` (`application/pdf`) | 333 bytes |
+| 64756 | curl | `GET /archivo.pdf` | `HTTP/1.0 200 OK` (`application/pdf`) | 91 bytes |
+
+Los pedidos de Chrome son más grandes porque incluyen más encabezados, como `Connection: keep-alive`, `Upgrade-Insecure-Requests` y el `User-Agent` completo del navegador. Estos encabezados se ven en el panel hexadecimal de la evidencia del pedido y la respuesta.
+
+**Establecimiento de la conexión.** Con el filtro `tcp.flags.syn == 1` se observa que cada conexión comienza con el *three-way handshake* de TCP. El tercer paso, el `ACK` del cliente, aparece en el gráfico de flujo más adelante. Las opciones negociadas son:
+
+- **MSS=1460** en ambos sentidos: 1500 bytes de MTU menos 20 bytes de encabezado IP y 20 bytes de encabezado TCP.
+- **WS=256** (escalado de ventana) en el `SYN` de la Windows. Permite anunciar ventanas mayores a 65.535 bytes: en el cierre de la conexión de Chrome, el cliente anuncia `Win=524032`, un valor que no podría expresarse sin escalado.
+- **SACK_PERM**: ambos extremos admiten confirmaciones selectivas.
+
+Chrome abrió **dos conexiones en el mismo instante** (paquetes 141 y 142, puertos 59878 y 64751). Usó la 64751 para pedir el listado y dejó la 59878 abierta, que reutilizó 12,7 segundos después para descargar el PDF (paquete 236). curl, en cambio, abrió **una sola conexión** (paquete 2372, puerto 64756), el mismo puerto que informó en su salida.
+
+**Evidencia: establecimiento de las conexiones (SYN y SYN-ACK).**
+
+![Three-way handshake en Wireshark](Multimedia/16_wireshark_handshake.png)
+
+**Pedido y respuesta HTTP.** Con el filtro `http`, Wireshark identificó el tráfico del puerto 8000 como HTTP de forma automática. Los clientes piden con **HTTP/1.1**, pero el servidor de Python responde con **HTTP/1.0**, su versión predeterminada. El `Content-type` de cada respuesta corresponde al recurso pedido: `text/html` para el listado y `application/pdf` para el archivo.
+
+**Evidencia: pedidos GET y respuestas 200 OK.**
+
+![Pedidos y respuestas HTTP](Multimedia/17_wireshark_http_get_200.png)
+
+**Transferencia de los datos.** El gráfico de flujo de la conexión de curl muestra la secuencia completa:
+
+1. `SYN`, `SYN, ACK` y `ACK`: establecimiento de la conexión.
+2. `GET /archivo.pdf` de 91 bytes, que el servidor confirma con `Ack=92`.
+3. El servidor envía los encabezados de la respuesta en un segmento `PSH, ACK` de 195 bytes (`Seq` de 1 a 196). Después envía el PDF en segmentos de **1460 bytes**, el MSS negociado (`Seq=196, 1656, 3116, 4576…`).
+4. El cliente responde con **ACK acumulativos**: por ejemplo, `Ack=7496` confirma de una sola vez el segmento de encabezados y los cinco primeros segmentos del archivo.
+
+Los números de secuencia son consistentes con lo transferido: 1 + 195 bytes de encabezados + 369.766 bytes del PDF + 1 por el `FIN` del servidor = **369.963**. Ese es exactamente el `Ack` que envía el cliente en su `FIN` (paquete 2660).
+
+**Evidencia: gráfico de flujo de la conexión de curl.**
+
+![Gráfico de flujo TCP](Multimedia/19_wireshark_grafico_flujo.png)
+
+**Contenido sin cifrar.** La opción *Seguir secuencia TCP* reconstruye la conversación de curl completa en texto plano: el pedido, los encabezados de la respuesta y el comienzo del PDF (`%PDF-1.4`, `/Title (RC - TP N6)`). La conversación tiene un paquete de datos del cliente y 256 del servidor, unos 370 kB en total. Cualquiera que pueda capturar este tráfico puede leerlo o reconstruir el archivo, ya que HTTP no cifra. Para evitarlo se necesitaría HTTPS, es decir, HTTP sobre TLS.
+
+**Evidencia: conversación reconstruida con "Seguir secuencia TCP".**
+
+![Seguir secuencia TCP](Multimedia/18_wireshark_flujo_tcp.png)
+
+**Cierre de la conexión.** Con el filtro `tcp.flags.fin == 1` se observa que, en las tres conexiones, **el servidor cierra primero**. Su `FIN` viaja en el mismo segmento que la última parte de la respuesta HTTP: por eso los paquetes 152, 508 y 2656 aparecen con este filtro. Luego el cliente responde con su propio `FIN, ACK` (paquetes 155, 512 y 2660). Este comportamiento se debe a que el servidor responde con HTTP/1.0 y cierra la conexión después de cada respuesta, como anticipó curl con `assume close after body`. Por eso cada descarga utiliza su propia conexión TCP. El paquete 140 pertenece a una conexión anterior del cliente cuyo inicio no quedó en la captura: Wireshark la marca como incompleta y, al no haber visto el *handshake*, no puede aplicar el escalado de ventana (`Win=255`).
+
+**Evidencia: segmentos con FIN.**
+
+![Cierre de las conexiones con FIN](Multimedia/20_wireshark_cierre_fin.png)
+
+**Jerarquía de protocolos.** Para la conexión de curl (`tcp.stream eq 80`), las estadísticas muestran 290 tramas, todas Ethernet → IPv4 → TCP. HTTP aparece solo en 2 paquetes, el pedido y la respuesta reensamblada, pero esos paquetes concentran el **95,9 % de los bytes**. La entrada *Media Type* corresponde al cuerpo del PDF: 369.766 bytes. Los encabezados Ethernet (14 bytes × 290 = 4.060 bytes), IPv4 (20 bytes × 290 = 5.800 bytes) y TCP (5.824 bytes) representan alrededor del 4 % de los 385.736 bytes de la conexión.
+
+La captura se hizo sobre WiFi, pero Wireshark muestra tramas **Ethernet II**. En modo normal (*managed*), la placa WiFi entrega las tramas al sistema operativo ya convertidas a formato Ethernet, con las direcciones MAC de ambos adaptadores (TP-Link en la Windows, Intel en la Linux). Para ver los encabezados 802.11 haría falta capturar en modo monitor.
+
+**Evidencia: jerarquía de protocolos de la conexión de curl.**
+
+![Jerarquía de protocolos](Multimedia/21_wireshark_jerarquia.png)
+
+**Respuesta: ¿de qué tipo es el tráfico?**
+
+Es tráfico **HTTP**, de capa de aplicación y con un modelo de pedido y respuesta (`GET` → `200 OK`). Se transporta sobre **TCP**, un protocolo orientado a conexión y confiable, que a su vez va sobre **IPv4** y tramas **Ethernet II** (WiFi). Es tráfico **unicast** entre el cliente `192.168.1.6` (puertos efímeros 64751, 59878 y 64756) y el servidor `192.168.1.7:8000`, y viaja **sin cifrar**.
+
+La comparación con el tráfico UDP analizado en los incisos anteriores resume las diferencias entre ambos protocolos de transporte:
+
+| Aspecto | UDP (Packet Sender, puerto 5555) | HTTP sobre TCP (puerto 8000) |
+|---|---|---|
+| Establecimiento de conexión | No existe: los datagramas se envían directamente | *Three-way handshake* (`SYN`, `SYN-ACK`, `ACK`) |
+| Confirmación de recepción | No existe | `ACK` acumulativos del receptor |
+| Tamaño de los datos | Cada mensaje viaja en un único datagrama (10, 22 y 20 bytes) | El archivo de 369.766 bytes se divide en segmentos de hasta 1460 bytes y se reensambla en el destino |
+| Cierre | No existe | `FIN` de ambos extremos |
+| Integridad de los datos | No garantizada por el protocolo | Verificada: hash SHA-256 idéntico en origen y destino |
+
+Como esta actividad no requirió modificar la configuración de red de ningún equipo, al finalizar no fue necesario restaurar direcciones IP, a diferencia de la Parte 2.
